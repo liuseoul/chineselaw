@@ -1,0 +1,3 @@
+# Test Page
+
+This is a test page for our new website. Today we are testing the publishing workflow from local editing to Cloudflare Pages deployment. The goal is to confirm that the domain, hosting, and deployment are working correctly. We also want to confirm the page can be viewed on both desktop and mobile phone. In the next stage, we will build a multilingual legal knowledge website for foreign clients, covering China dispute resolution, investment consulting, and representation practice. If this page is visible after deployment, today’s technical setup and publishing test are successful.
