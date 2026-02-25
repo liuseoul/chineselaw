@@ -1,6 +1,4 @@
-export default {
-  async fetch(request) {
-    return new Response(`<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -138,8 +136,4 @@ export default {
     </section>
   </div>
 </body>
-</html>`, {
-      headers: { "content-type": "text/html; charset=UTF-8" },
-    });
-  },
-};
+</html>
