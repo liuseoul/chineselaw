@@ -1,0 +1,145 @@
+export default {
+  async fetch(request) {
+    return new Response(`<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>China Legal Practice Knowledge Base</title>
+  <meta name="description" content="Practical guidance for foreign companies and individuals on China dispute resolution, investment consulting, and representation practice." />
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background: #f9fafb;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 8px 0;
+      line-height: 1.25;
+    }
+    h2 {
+      font-size: 1.1rem;
+      margin: 0 0 8px 0;
+    }
+    p {
+      margin: 0 0 10px 0;
+    }
+    ul {
+      margin: 8px 0 0 20px;
+      padding: 0;
+    }
+    li { margin-bottom: 6px; }
+    .subtitle { color: #4b5563; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid #d1d5db;
+      color: #111827;
+      background: #fff;
+      font-weight: 600;
+    }
+    .btn.primary {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+    .small {
+      font-size: 0.92rem;
+      color: #6b7280;
+    }
+    @media (min-width: 760px) {
+      h1 { font-size: 2.1rem; }
+      .container { padding: 32px 20px 56px; }
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="card">
+      <h1>China Legal Practice Knowledge Base</h1>
+      <p class="subtitle">
+        Practical guidance for foreign companies and individuals on China dispute resolution, investment consulting, and representation practice.
+      </p>
+      <div class="btns">
+        <a class="btn primary" href="#">Start Here</a>
+        <a class="btn" href="#">Request Preliminary Assessment</a>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Who This Site Is For</h2>
+      <p>
+        This site is designed for foreign companies, investors, individuals, in-house legal teams,
+        and overseas counsel dealing with China-related legal and commercial matters.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Practice Focus</h2>
+      <div class="grid">
+        <div>
+          <h2>Dispute Resolution</h2>
+          <p>China arbitration, court litigation, enforcement, evidence, and procedural risk guidance.</p>
+        </div>
+        <div>
+          <h2>Investment Consulting</h2>
+          <p>Pre-investment legal risk orientation, transaction structure risk, and dispute prevention planning.</p>
+        </div>
+        <div>
+          <h2>Representation Practice</h2>
+          <p>Representation support for foreign clients and cross-border coordination with overseas counsel.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>What You Will Find Here</h2>
+      <ul>
+        <li>Practical guides on China arbitration and litigation</li>
+        <li>Contract and dispute clause drafting checklists</li>
+        <li>Investment and transaction risk checklists</li>
+        <li>Procedural preparation notes for foreign parties</li>
+        <li>Case notes and legal practice updates</li>
+      </ul>
+    </section>
+
+    <section class="small">
+      Disclaimer: The materials on this website are provided for general informational purposes only and do not constitute legal advice.
+      Viewing this website or contacting us does not, by itself, create a lawyer-client relationship.
+    </section>
+  </div>
+</body>
+</html>`, {
+      headers: { "content-type": "text/html; charset=UTF-8" },
+    });
+  },
+};
