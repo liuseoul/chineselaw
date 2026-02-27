@@ -34,27 +34,20 @@
       font-size: 1.1rem;
       margin: 0 0 8px 0;
     }
-    p {
-      margin: 0 0 10px 0;
-    }
-    ul {
-      margin: 8px 0 0 20px;
-      padding: 0;
-    }
+    p { margin: 0 0 10px 0; }
+    ul { margin: 8px 0 0 20px; padding: 0; }
     li { margin-bottom: 6px; }
-    .subtitle { color: #4b5563; }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-    .btns {
+
+    .subtitle { color: #4b5563; margin-bottom: 0; }
+
+    /* Simple link buttons */
+    .links {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 12px;
     }
-    .btn {
+    .linkbtn {
       display: inline-block;
       padding: 10px 14px;
       border-radius: 8px;
@@ -64,35 +57,72 @@
       background: #fff;
       font-weight: 600;
     }
-    .btn.primary {
-      background: #111827;
-      color: #fff;
-      border-color: #111827;
+
+    /* Section header with right-aligned action link */
+    .sectionhead {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
     }
+    .sectionhead a {
+      font-size: 0.95rem;
+      color: #111827;
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+
+    /* Recent publications list */
+    .pubs {
+      list-style: none;
+      margin: 10px 0 0 0;
+      padding: 0;
+    }
+    .pubs li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eef2f7;
+      margin: 0;
+    }
+    .pubs li:last-child { border-bottom: none; }
+    .pubs a {
+      text-decoration: none;
+      color: #111827;
+      font-weight: 600;
+    }
+    .pubs a:hover { text-decoration: underline; }
+
     .small {
       font-size: 0.92rem;
       color: #6b7280;
     }
+
     @media (min-width: 760px) {
-      h1 { font-size: 2.1rem; }
       .container { padding: 32px 20px 56px; }
-      .grid { grid-template-columns: repeat(3, 1fr); }
+      h1 { font-size: 2.1rem; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
+
+    <!-- 1) Hero -->
     <section class="card">
       <h1>China Legal Practice Knowledge Base</h1>
       <p class="subtitle">
         Practical guidance for foreign companies and individuals on China dispute resolution, investment consulting, and representation practice.
       </p>
-      <div class="btns">
-        <a class="btn primary" href="/start-here.html">Start Here</a>
-        <a class="btn" href="/contact.html">Request Preliminary Assessment</a>
+
+      <!-- (1) Replace buttons with three hyperlinks -->
+      <div class="links">
+        <a class="linkbtn" href="#">Dispute Resolution</a>
+        <a class="linkbtn" href="#">Investment Consulting</a>
+        <a class="linkbtn" href="#">Representation Practice</a>
       </div>
     </section>
 
+    <!-- 2) Who This Site Is For -->
     <section class="card">
       <h2>Who This Site Is For</h2>
       <p>
@@ -101,24 +131,7 @@
       </p>
     </section>
 
-    <section class="card">
-      <h2>Practice Focus</h2>
-      <div class="grid">
-        <div>
-          <h2>Dispute Resolution</h2>
-          <p>China arbitration, court litigation, enforcement, evidence, and procedural risk guidance.</p>
-        </div>
-        <div>
-          <h2>Investment Consulting</h2>
-          <p>Pre-investment legal risk orientation, transaction structure risk, and dispute prevention planning.</p>
-        </div>
-        <div>
-          <h2>Representation Practice</h2>
-          <p>Representation support for foreign clients and cross-border coordination with overseas counsel.</p>
-        </div>
-      </div>
-    </section>
-
+    <!-- 3) Move "What You Will Find Here" to third place -->
     <section class="card">
       <h2>What You Will Find Here</h2>
       <ul>
@@ -126,14 +139,42 @@
         <li>Contract and dispute clause drafting checklists</li>
         <li>Investment and transaction risk checklists</li>
         <li>Procedural preparation notes for foreign parties</li>
-        <li>Case notes and legal practice updates</li>
+        <li>Selected practice updates relevant to foreign parties</li>
       </ul>
+    </section>
+
+    <!-- 4) Add "Latest articles" section with more professional title -->
+    <section class="card">
+      <div class="sectionhead">
+        <h2>Recent Publications</h2>
+        <!-- 5) Top-right link -->
+        <a href="#">View all publications</a>
+      </div>
+
+      <!-- 5) Ten article titles -->
+      <ul class="pubs">
+        <li><a href="#">How Foreign Companies Can Start Arbitration in China: A Practical Step-by-Step Guide</a></li>
+        <li><a href="#">China Arbitration vs Court Litigation: How Foreign Parties Should Choose</a></li>
+        <li><a href="#">How to Draft a China-Related Dispute Resolution Clause: Checklist and Common Mistakes</a></li>
+        <li><a href="#">Interim Measures and Asset Preservation in China Disputes: What Foreign Parties Need to Know</a></li>
+        <li><a href="#">Enforcing an Arbitral Award in China: A Practical Guide for Foreign Parties</a></li>
+        <li><a href="#">Legal Risk Checklist for Foreign Investment Projects in China: Contract, Control, and Dispute Prevention</a></li>
+        <li><a href="#">China Contract Risk Review for Foreign Businesses: 10 Clauses That Matter Most</a></li>
+        <li><a href="#">When to Seek Representation in a China-Related Commercial Dispute: A Practical Decision Guide</a></li>
+        <li><a href="#">Evidence Preparation for China Arbitration, Litigation, and Investment Disputes: A Practical Checklist</a></li>
+        <li><a href="#">A Practical Timeline of a China-Related Matter: From Contract Risk Review to Dispute Resolution and Enforcement</a></li>
+      </ul>
+
+      <p class="small" style="margin-top:10px;">
+        Note: Multilingual versions will be added in stages (EN / RU / JA / KO / ES / FR).
+      </p>
     </section>
 
     <section class="small">
       Disclaimer: The materials on this website are provided for general informational purposes only and do not constitute legal advice.
       Viewing this website or contacting us does not, by itself, create a lawyer-client relationship.
     </section>
+
   </div>
 </body>
 </html>
