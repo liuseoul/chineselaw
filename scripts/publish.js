@@ -87,28 +87,26 @@ function parseTxt(file) {
   return { date, slug: slugFromFile, title, body };
 }
 
-/** Load the current ARTICLES_DATA array from articles-data.js */
+/** Load the current ARTICLES_DATA array from articles-data.js.
+ *  Uses Node's vm module so unquoted JS keys parse correctly. */
 function loadArticlesData() {
   const src = fs.readFileSync(DATA_FILE, "utf8");
-  // Extract the array literal using a safe eval approach
-  const match = src.match(/var ARTICLES_DATA\s*=\s*(\[[\s\S]*?\]);/);
+  // Greedy match — captures the FULL array up to the final ];
+  const match = src.match(/var ARTICLES_DATA\s*=\s*(\[[\s\S]*\]);/);
   if (!match) throw new Error("Cannot find ARTICLES_DATA in articles-data.js");
-  return JSON.parse(
-    match[1]
-      .replace(/\/\/[^\n]*/g, "")        // strip // comments
-      .replace(/,(\s*[}\]])/g, "$1")     // strip trailing commas
-  );
+  const vm = require("vm");
+  const ctx = vm.createContext({});
+  vm.runInContext("result = " + match[1], ctx);
+  return ctx.result;
 }
 
-/** Rewrite articles-data.js with updated array */
+/** Rewrite articles-data.js with updated array (saves as valid JSON — fine for browsers). */
 function saveArticlesData(articles) {
   const src = fs.readFileSync(DATA_FILE, "utf8");
-  const serialised = JSON.stringify(articles, null, 2)
-    .replace(/"([^"]+)":/g, "$1:")          // unquote keys
-    .replace(/null/g, "null");
-
+  const serialised = JSON.stringify(articles, null, 2);
+  // Greedy replace — replaces the FULL old array block
   const updated = src.replace(
-    /var ARTICLES_DATA\s*=\s*\[[\s\S]*?\];/,
+    /var ARTICLES_DATA\s*=\s*\[[\s\S]*\];/,
     "var ARTICLES_DATA = " + serialised + ";"
   );
   fs.writeFileSync(DATA_FILE, updated, "utf8");
@@ -136,7 +134,7 @@ ENGLISH BODY:
 ${enBody}`;
 
   const msg = await client.messages.create({
-    model: "claude-opus-4-5",
+    model: "claude-3-5-sonnet-20241022",
     max_tokens: 4096,
     messages: [{ role: "user", content: prompt }],
   });
@@ -233,7 +231,8 @@ async function main() {
     console.error("ERROR: ANTHROPIC_API_KEY not set. Create a .env file with:\n  ANTHROPIC_API_KEY=sk-ant-...");
     process.exit(1);
   }
-  const client = new Anthropic.default({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const AnthropicClient = Anthropic.default ?? Anthropic;
+  const client = new AnthropicClient({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   // Load existing articles
   const articles = loadArticlesData();
