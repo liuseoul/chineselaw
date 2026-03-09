@@ -6,127 +6,61 @@
   <title>China Legal Practice Knowledge Base</title>
   <meta name="description" content="Practical guidance for foreign companies and individuals on China dispute resolution, investment consulting, and representation practice." />
   <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      line-height: 1.6;
-      color: #1f2937;
-      background: #f9fafb;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-    .card {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    h1 {
-      font-size: 1.8rem;
-      margin: 0 0 8px 0;
-      line-height: 1.25;
-    }
-    h2 {
-      font-size: 1.1rem;
-      margin: 0 0 8px 0;
-    }
-    p { margin: 0 0 10px 0; }
-    ul { margin: 8px 0 0 20px; padding: 0; }
-    li { margin-bottom: 6px; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.6; color:#1f2937; background:#f9fafb; }
+    .container { max-width:900px; margin:0 auto; padding:24px 16px 48px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:20px; margin-bottom:16px; }
+    h1 { font-size:1.8rem; margin:0 0 8px 0; line-height:1.25; }
+    h2 { font-size:1.1rem; margin:0 0 8px 0; }
+    p { margin:0 0 10px 0; }
+    ul { margin:8px 0 0 20px; padding:0; }
+    li { margin-bottom:6px; }
+    .subtitle { color:#4b5563; margin-bottom:0; }
+    .links { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .linkbtn { display:inline-block; padding:10px 14px; border-radius:8px; text-decoration:none; border:1px solid #d1d5db; color:#111827; background:#fff; font-weight:600; }
+    .linkbtn:hover { border-color:#9ca3af; background:#f9fafb; }
+    .sectionhead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:8px; }
+    .sectionhead a { font-size:0.95rem; color:#111827; text-decoration:underline; white-space:nowrap; }
+    .pubs { list-style:none; margin:10px 0 0 0; padding:0; }
+    .pubs li { padding:10px 0; border-bottom:1px solid #eef2f7; margin:0; }
+    .pubs li:last-child { border-bottom:none; }
+    .pubtitle { text-decoration:none; color:#111827; font-weight:700; }
+    .pubtitle:hover { text-decoration:underline; }
+    .pubmeta { margin-top:4px; font-size:0.92rem; color:#6b7280; }
+    .small { font-size:0.92rem; color:#6b7280; }
 
-    .subtitle { color: #4b5563; margin-bottom: 0; }
+    /* ── Language switcher ── */
+    .langbar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+    .langbar span { font-size:0.8rem; color:#9ca3af; margin-right:2px; }
+    .langtag { display:inline-block; padding:3px 9px; border-radius:5px; font-size:0.82rem; font-weight:700;
+               text-decoration:none; border:1px solid #d1d5db; color:#374151; background:#fff; letter-spacing:.04em; }
+    .langtag:hover { background:#f3f4f6; border-color:#9ca3af; }
+    .langtag.current { background:#111827; color:#fff; border-color:#111827; cursor:default; }
 
-    /* Simple link buttons */
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .linkbtn {
-      display: inline-block;
-      padding: 10px 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      border: 1px solid #d1d5db;
-      color: #111827;
-      background: #fff;
-      font-weight: 600;
-    }
-    .linkbtn:hover {
-      border-color: #9ca3af;
-      background: #f9fafb;
-    }
-
-    /* Section header with right-aligned action link */
-    .sectionhead {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-    .sectionhead a {
-      font-size: 0.95rem;
-      color: #111827;
-      text-decoration: underline;
-      white-space: nowrap;
-    }
-
-    /* Recent publications list */
-    .pubs {
-      list-style: none;
-      margin: 10px 0 0 0;
-      padding: 0;
-    }
-    .pubs li {
-      padding: 10px 0;
-      border-bottom: 1px solid #eef2f7;
-      margin: 0;
-    }
-    .pubs li:last-child { border-bottom: none; }
-
-    .pubtitle {
-      text-decoration: none;
-      color: #111827;
-      font-weight: 700;
-    }
-    .pubtitle:hover { text-decoration: underline; }
-
-    .pubmeta {
-      margin-top: 4px;
-      font-size: 0.92rem;
-      color: #6b7280;
-    }
-
-    .small {
-      font-size: 0.92rem;
-      color: #6b7280;
-    }
-
-    @media (min-width: 760px) {
-      .container { padding: 32px 20px 56px; }
-      h1 { font-size: 2.1rem; }
-    }
+    @media (min-width:760px){ .container{ padding:32px 20px 56px; } h1{ font-size:2.1rem; } }
   </style>
 </head>
-
 <body>
   <div class="container">
+
+    <!-- Language switcher -->
+    <nav class="langbar" aria-label="Language">
+      <span>Language:</span>
+      <a class="langtag current" href="/index.html">EN</a>
+      <a class="langtag" href="/ko/index.html">KR</a>
+      <a class="langtag" href="/ja/index.html">JP</a>
+      <a class="langtag" href="/fr/index.html">FR</a>
+      <a class="langtag" href="/ru/index.html">RU</a>
+      <a class="langtag" href="/es/index.html">ES</a>
+    </nav>
 
     <!-- 1) Hero -->
     <section class="card">
       <h1>China Legal Practice Knowledge Base</h1>
       <p class="subtitle">
-        Practical guidance for foreign companies and individuals on China dispute resolution, investment consulting, and representation practice.
+        Practical guidance for foreign companies and individuals on China dispute resolution,
+        investment consulting, and representation practice.
       </p>
-
       <div class="links">
-        <!-- Replace # with real category pages whenever you add them -->
         <a class="linkbtn" href="dispute-resolution.html">Dispute Resolution</a>
         <a class="linkbtn" href="investment-consulting.html">Investment Consulting</a>
         <a class="linkbtn" href="representation-practice.html">Representation Practice</a>
@@ -160,73 +94,35 @@
         <h2>Recent Publications</h2>
         <a href="publications.html">View all publications</a>
       </div>
-
-      <ul class="pubs" id="recent-publications">
-        <!-- filled by JS -->
-      </ul>
-
+      <ul class="pubs" id="recent-publications"><!-- filled by JS --></ul>
       <p class="small" style="margin-top:10px;">
-        Note: Multilingual versions will be added in stages (EN / RU / JA / KO / ES / FR).
+        Multilingual versions: KR · JP · FR · RU · ES — updated automatically with each new article.
       </p>
     </section>
 
     <section class="small">
-      Disclaimer: The materials on this website are provided for general informational purposes only and do not constitute legal advice.
-      Viewing this website or contacting us does not, by itself, create a lawyer-client relationship.
+      Disclaimer: The materials on this website are provided for general informational purposes only
+      and do not constitute legal advice. Viewing this website or contacting us does not, by itself,
+      create a lawyer-client relationship.
     </section>
 
   </div>
 
+  <!-- Shared article data -->
+  <script src="articles-data.js"></script>
   <script>
-    /**
-     * Single source of truth: maintain article list here (and reuse the same list on publications.html).
-     * - date: YYYY-MM-DD (used to sort)
-     * - title: display title
-     * - url: target page (can be /articles/... or a placeholder)
-     */
-    const ARTICLES = [
-      { date: "2026-03-01", title: "How Foreign Companies Can Start Arbitration in China: A Practical Step-by-Step Guide", url: "articles/arbitration-start-guide.html" },
-      { date: "2026-02-24", title: "China Arbitration vs Court Litigation: How Foreign Parties Should Choose", url: "articles/arbitration-vs-litigation.html" },
-      { date: "2026-02-18", title: "How to Draft a China-Related Dispute Resolution Clause: Checklist and Common Mistakes", url: "articles/dispute-clause-checklist.html" },
-      { date: "2026-02-10", title: "Interim Measures and Asset Preservation in China Disputes: What Foreign Parties Need to Know", url: "articles/interim-measures-asset-preservation.html" },
-      { date: "2026-02-02", title: "Enforcing an Arbitral Award in China: A Practical Guide for Foreign Parties", url: "articles/enforcing-arbitral-award.html" },
-      { date: "2026-01-28", title: "Legal Risk Checklist for Foreign Investment Projects in China: Contract, Control, and Dispute Prevention", url: "articles/investment-risk-checklist.html" },
-      { date: "2026-01-19", title: "China Contract Risk Review for Foreign Businesses: 10 Clauses That Matter Most", url: "articles/contract-risk-review-10-clauses.html" },
-      { date: "2026-01-12", title: "When to Seek Representation in a China-Related Commercial Dispute: A Practical Decision Guide", url: "articles/when-to-seek-representation.html" },
-      { date: "2025-12-30", title: "Evidence Preparation for China Arbitration, Litigation, and Investment Disputes: A Practical Checklist", url: "articles/evidence-preparation-checklist.html" },
-      { date: "2025-12-20", title: "A Practical Timeline of a China-Related Matter: From Contract Risk Review to Dispute Resolution and Enforcement", url: "articles/practical-timeline.html" },
-
-      /* Add more below; Recent Publications will always show latest 10 */
-      // { date: "2025-12-01", title: "Example older article", url: "articles/example.html" },
-    ];
-
-    function formatDate(yyyyMmDd) {
-      // Keep it simple & stable: "YYYY-MM-DD"
-      // If you want "Mar 1, 2026", tell me your preferred format.
-      return yyyyMmDd;
-    }
-
-    function renderRecentPublications() {
-      const list = document.getElementById("recent-publications");
+    (function () {
+      var list = document.getElementById("recent-publications");
       if (!list) return;
-
-      const sorted = [...ARTICLES].sort((a, b) => b.date.localeCompare(a.date));
-      const recent = sorted.slice(0, 10);
-
-      list.innerHTML = recent.map(item => {
-        const safeTitle = item.title; // titles are authored by you
-        const safeUrl = item.url || "#";
-        const safeDate = item.date ? formatDate(item.date) : "";
-        return `
-          <li>
-            <a class="pubtitle" href="${safeUrl}">${safeTitle}</a>
-            ${safeDate ? `<div class="pubmeta">${safeDate}</div>` : ``}
-          </li>
-        `.trim();
+      var sorted = ARTICLES_DATA.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+      var recent = sorted.slice(0, 10);
+      list.innerHTML = recent.map(function(a) {
+        var title = a.en.title;
+        var url   = "articles/" + a.slug + ".html";
+        return '<li><a class="pubtitle" href="' + url + '">' + title + '</a>'
+             + '<div class="pubmeta">' + a.date + '</div></li>';
       }).join("");
-    }
-
-    renderRecentPublications();
+    })();
   </script>
 </body>
 </html>

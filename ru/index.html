@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>База знаний по китайскому праву</title>
+  <meta name="description" content="Практическое руководство для иностранных компаний по разрешению споров в Китае, инвестиционному консалтингу и представительской практике." />
+  <style>
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;color:#1f2937;background:#f9fafb;}
+    .container{max-width:900px;margin:0 auto;padding:24px 16px 48px;}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;}
+    h1{font-size:1.8rem;margin:0 0 8px 0;line-height:1.25;}
+    h2{font-size:1.1rem;margin:0 0 8px 0;}
+    p{margin:0 0 10px 0;} ul{margin:8px 0 0 20px;padding:0;} li{margin-bottom:6px;}
+    .subtitle{color:#4b5563;margin-bottom:0;}
+    .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+    .linkbtn{display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;border:1px solid #d1d5db;color:#111827;background:#fff;font-weight:600;}
+    .linkbtn:hover{border-color:#9ca3af;background:#f9fafb;}
+    .sectionhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;}
+    .sectionhead a{font-size:0.95rem;color:#111827;text-decoration:underline;white-space:nowrap;}
+    .pubs{list-style:none;margin:10px 0 0 0;padding:0;}
+    .pubs li{padding:10px 0;border-bottom:1px solid #eef2f7;margin:0;}
+    .pubs li:last-child{border-bottom:none;}
+    .pubtitle{text-decoration:none;color:#111827;font-weight:700;}
+    .pubtitle:hover{text-decoration:underline;}
+    .pubmeta{margin-top:4px;font-size:0.92rem;color:#6b7280;}
+    .small{font-size:0.92rem;color:#6b7280;}
+    .langbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+    .langbar span{font-size:0.8rem;color:#9ca3af;margin-right:2px;}
+    .langtag{display:inline-block;padding:3px 9px;border-radius:5px;font-size:0.82rem;font-weight:700;
+             text-decoration:none;border:1px solid #d1d5db;color:#374151;background:#fff;letter-spacing:.04em;}
+    .langtag:hover{background:#f3f4f6;border-color:#9ca3af;}
+    .langtag.current{background:#111827;color:#fff;border-color:#111827;cursor:default;}
+    @media(min-width:760px){.container{padding:32px 20px 56px;}h1{font-size:2.1rem;}}</style>
+</head>
+<body>
+  <div class="container">
+    <nav class="langbar" aria-label="Language">
+      <span>Language:</span>
+      <a class="langtag" href="/index.html">EN</a>
+      <a class="langtag" href="/ko/index.html">KR</a>
+      <a class="langtag" href="/ja/index.html">JP</a>
+      <a class="langtag" href="/fr/index.html">FR</a>
+      <a class="langtag current" href="/ru/index.html">RU</a>
+      <a class="langtag" href="/es/index.html">ES</a>
+    </nav>
+    <section class="card">
+      <h1>База знаний по китайскому праву</h1>
+      <p class="subtitle">Практическое руководство для иностранных компаний и физических лиц по разрешению споров в Китае, инвестиционному консалтингу и представительской практике.</p>
+      <div class="links">
+        <a class="linkbtn" href="/dispute-resolution.html">Разрешение споров</a>
+        <a class="linkbtn" href="/investment-consulting.html">Инвестиционный консалтинг</a>
+        <a class="linkbtn" href="/representation-practice.html">Представительская практика</a>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Для кого предназначен этот сайт</h2>
+      <p>Сайт предназначен для иностранных компаний, инвесторов, физических лиц, корпоративных юридических отделов и зарубежных адвокатов, занимающихся правовыми и коммерческими вопросами, связанными с Китаем.</p>
+    </section>
+    <section class="card">
+      <h2>Что вы найдёте на сайте</h2>
+      <ul><li>Практические руководства по арбитражу и судебным разбирательствам в Китае</li><li>Контрольные списки для составления договорных и арбитражных оговорок</li><li>Контрольные списки инвестиционных и транзакционных рисков</li><li>Практические заметки по подготовке иностранных сторон к процессу</li><li>Актуальные обновления практики для иностранных сторон</li></ul>
+    </section>
+    <section class="card">
+      <div class="sectionhead">
+        <h2>Последние публикации</h2>
+        <a href="/ru/publications.html">Просмотреть все публикации</a>
+      </div>
+      <ul class="pubs" id="recent-publications"><!-- filled by JS --></ul>
+      <p class="small" style="margin-top:10px;">Многоязычные версии обновляются автоматически при добавлении каждой новой статьи.</p>
+    </section>
+    <p class="small">Эта страница переведена автоматически и проверена специалистом.</p>
+    <section class="small">Отказ от ответственности: Материалы на этом сайте предоставляются исключительно в информационных целях и не являются юридической консультацией.</section>
+  </div>
+  <script src="../articles-data.js"></script>
+  <script>
+    (function(){
+      var LANG="ru";
+      var list=document.getElementById("recent-publications");
+      if(!list)return;
+      var sorted=ARTICLES_DATA.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
+      var recent=sorted.slice(0,10);
+      list.innerHTML=recent.map(function(a){
+        var title=(a[LANG]&&a[LANG].title)?a[LANG].title:a.en.title;
+        var url="articles/"+a.slug+".html";
+        return "<li><a class=\"pubtitle\" href=\""+url+"\">"+title+"</a><div class=\"pubmeta\">"+a.date+"</div></li>";
+      }).join("");
+    })();
+  </script>
+</body>
+</html>

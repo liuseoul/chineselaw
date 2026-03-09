@@ -5,102 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Publications | China Legal Practice Knowledge Base</title>
   <meta name="description" content="All publications and practical guides for foreign parties dealing with China-related legal matters." />
-
   <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      line-height: 1.6;
-      color: #1f2937;
-      background: #f9fafb;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-    .card {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    h1 {
-      font-size: 1.6rem;
-      margin: 0 0 6px 0;
-      line-height: 1.25;
-    }
-    .subtitle { color: #4b5563; margin: 0; }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .backlink {
-      color: #111827;
-      text-decoration: underline;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .searchrow {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-    input[type="search"] {
-      flex: 1;
-      min-width: 220px;
-      padding: 10px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 1rem;
-      background: #fff;
-    }
-    .count {
-      color: #6b7280;
-      font-size: 0.95rem;
-      margin-top: 10px;
-    }
-
-    .pubs {
-      list-style: none;
-      margin: 12px 0 0 0;
-      padding: 0;
-    }
-    .pubs li {
-      padding: 12px 0;
-      border-bottom: 1px solid #eef2f7;
-    }
-    .pubs li:last-child { border-bottom: none; }
-
-    .pubtitle {
-      text-decoration: none;
-      color: #111827;
-      font-weight: 700;
-    }
-    .pubtitle:hover { text-decoration: underline; }
-
-    .pubmeta {
-      margin-top: 4px;
-      font-size: 0.92rem;
-      color: #6b7280;
-    }
-
-    .small {
-      font-size: 0.92rem;
-      color: #6b7280;
-    }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.6; color:#1f2937; background:#f9fafb; }
+    .container { max-width:900px; margin:0 auto; padding:24px 16px 48px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:20px; margin-bottom:16px; }
+    h1 { font-size:1.6rem; margin:0 0 6px 0; line-height:1.25; }
+    .subtitle { color:#4b5563; margin:0; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .backlink { color:#111827; text-decoration:underline; font-weight:600; white-space:nowrap; }
+    .searchrow { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    input[type="search"] { flex:1; min-width:220px; padding:10px 12px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; background:#fff; }
+    .count { color:#6b7280; font-size:0.95rem; margin-top:10px; }
+    .pubs { list-style:none; margin:12px 0 0 0; padding:0; }
+    .pubs li { padding:12px 0; border-bottom:1px solid #eef2f7; }
+    .pubs li:last-child { border-bottom:none; }
+    .pubtitle { text-decoration:none; color:#111827; font-weight:700; }
+    .pubtitle:hover { text-decoration:underline; }
+    .pubmeta { margin-top:4px; font-size:0.92rem; color:#6b7280; }
+    .small { font-size:0.92rem; color:#6b7280; }
+    /* Language switcher */
+    .langbar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+    .langbar span { font-size:0.8rem; color:#9ca3af; margin-right:2px; }
+    .langtag { display:inline-block; padding:3px 9px; border-radius:5px; font-size:0.82rem; font-weight:700;
+               text-decoration:none; border:1px solid #d1d5db; color:#374151; background:#fff; letter-spacing:.04em; }
+    .langtag:hover { background:#f3f4f6; border-color:#9ca3af; }
+    .langtag.current { background:#111827; color:#fff; border-color:#111827; cursor:default; }
   </style>
 </head>
-
 <body>
   <div class="container">
+
+    <nav class="langbar" aria-label="Language">
+      <span>Language:</span>
+      <a class="langtag current" href="/publications.html">EN</a>
+      <a class="langtag" href="/ko/publications.html">KR</a>
+      <a class="langtag" href="/ja/publications.html">JP</a>
+      <a class="langtag" href="/fr/publications.html">FR</a>
+      <a class="langtag" href="/ru/publications.html">RU</a>
+      <a class="langtag" href="/es/publications.html">ES</a>
+    </nav>
 
     <section class="card">
       <div class="topbar">
@@ -110,88 +53,53 @@
         </div>
         <a class="backlink" href="index.html">← Back to home</a>
       </div>
-
       <div class="searchrow">
-        <input id="search" type="search" placeholder="Search titles (e.g., arbitration, clause, enforcement)..." />
+        <input id="search" type="search" placeholder="Search titles…" />
       </div>
-
       <div id="count" class="count"></div>
-
-      <ul class="pubs" id="pub-list">
-        <!-- filled by JS -->
-      </ul>
-
+      <ul class="pubs" id="pub-list"><!-- filled by JS --></ul>
       <p class="small" style="margin-top:12px;">
-        Note: Multilingual versions will be added in stages (EN / RU / JA / KO / ES / FR).
+        Multilingual versions available: KR · JP · FR · RU · ES
       </p>
     </section>
 
     <section class="small">
-      Disclaimer: The materials on this website are provided for general informational purposes only and do not constitute legal advice.
-      Viewing this website or contacting us does not, by itself, create a lawyer-client relationship.
+      Disclaimer: The materials on this website are provided for general informational purposes only
+      and do not constitute legal advice. Viewing this website or contacting us does not, by itself,
+      create a lawyer-client relationship.
     </section>
-
   </div>
 
+  <script src="articles-data.js"></script>
   <script>
-    // Keep this list consistent with index.html
-    // Tip: once you like it, move ARTICLES to a shared /data/articles.js file (optional).
-    const ARTICLES = [
-      { date: "2026-03-01", title: "How Foreign Companies Can Start Arbitration in China: A Practical Step-by-Step Guide", url: "articles/arbitration-start-guide.html" },
-      { date: "2026-02-24", title: "China Arbitration vs Court Litigation: How Foreign Parties Should Choose", url: "articles/arbitration-vs-litigation.html" },
-      { date: "2026-02-18", title: "How to Draft a China-Related Dispute Resolution Clause: Checklist and Common Mistakes", url: "articles/dispute-clause-checklist.html" },
-      { date: "2026-02-10", title: "Interim Measures and Asset Preservation in China Disputes: What Foreign Parties Need to Know", url: "articles/interim-measures-asset-preservation.html" },
-      { date: "2026-02-02", title: "Enforcing an Arbitral Award in China: A Practical Guide for Foreign Parties", url: "articles/enforcing-arbitral-award.html" },
-      { date: "2026-01-28", title: "Legal Risk Checklist for Foreign Investment Projects in China: Contract, Control, and Dispute Prevention", url: "articles/investment-risk-checklist.html" },
-      { date: "2026-01-19", title: "China Contract Risk Review for Foreign Businesses: 10 Clauses That Matter Most", url: "articles/contract-risk-review-10-clauses.html" },
-      { date: "2026-01-12", title: "When to Seek Representation in a China-Related Commercial Dispute: A Practical Decision Guide", url: "articles/when-to-seek-representation.html" },
-      { date: "2025-12-30", title: "Evidence Preparation for China Arbitration, Litigation, and Investment Disputes: A Practical Checklist", url: "articles/evidence-preparation-checklist.html" },
-      { date: "2025-12-20", title: "A Practical Timeline of a China-Related Matter: From Contract Risk Review to Dispute Resolution and Enforcement", url: "articles/practical-timeline.html" },
-    ];
+    (function () {
+      var listEl   = document.getElementById("pub-list");
+      var countEl  = document.getElementById("count");
+      var searchEl = document.getElementById("search");
 
-    const listEl = document.getElementById("pub-list");
-    const countEl = document.getElementById("count");
-    const searchEl = document.getElementById("search");
+      function render(items) {
+        countEl.textContent = items.length + " publication(s)";
+        listEl.innerHTML = items.map(function(a) {
+          var title = a.en.title;
+          var url   = "articles/" + a.slug + ".html";
+          return '<li><a class="pubtitle" href="' + url + '">' + title + '</a>'
+               + '<div class="pubmeta">' + a.date + '</div></li>';
+        }).join("");
+      }
 
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
+      function getSorted() {
+        return ARTICLES_DATA.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+      }
 
-    function render(items) {
-      countEl.textContent = `${items.length} publication(s)`;
-      listEl.innerHTML = items.map(a => {
-        const title = escapeHtml(a.title);
-        const url = a.url ? a.url : "#";
-        const date = a.date ? escapeHtml(a.date) : "";
-        return `
-          <li>
-            <a class="pubtitle" href="${url}">${title}</a>
-            ${date ? `<div class="pubmeta">${date}</div>` : ``}
-          </li>
-        `;
-      }).join("");
-    }
+      function applyFilter() {
+        var q = (searchEl.value || "").trim().toLowerCase();
+        var base = getSorted();
+        render(q ? base.filter(function(a){ return a.en.title.toLowerCase().indexOf(q) !== -1; }) : base);
+      }
 
-    function getSortedArticles() {
-      return [...ARTICLES].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-    }
-
-    function applyFilter() {
-      const q = (searchEl.value || "").trim().toLowerCase();
-      const base = getSortedArticles();
-      if (!q) return render(base);
-      const filtered = base.filter(a => (a.title || "").toLowerCase().includes(q));
-      render(filtered);
-    }
-
-    // initial render + events
-    render(getSortedArticles());
-    searchEl.addEventListener("input", applyFilter);
+      render(getSorted());
+      searchEl.addEventListener("input", applyFilter);
+    })();
   </script>
 </body>
 </html>

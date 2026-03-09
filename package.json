@@ -1,0 +1,14 @@
+{
+  "name": "chineselaw-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "China Legal Practice Knowledge Base — multilingual static site",
+  "scripts": {
+    "publish": "node scripts/publish.js",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "^0.52.0",
+    "dotenv": "^16.0.0"
+  }
+}

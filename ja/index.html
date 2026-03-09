@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中国法律実務ナレッジベース</title>
+  <meta name="description" content="中国の紛争解決、投資コンサルティング、代理業務に関する外国企業・個人向け実務ガイダンス。" />
+  <style>
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;color:#1f2937;background:#f9fafb;}
+    .container{max-width:900px;margin:0 auto;padding:24px 16px 48px;}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;}
+    h1{font-size:1.8rem;margin:0 0 8px 0;line-height:1.25;}
+    h2{font-size:1.1rem;margin:0 0 8px 0;}
+    p{margin:0 0 10px 0;} ul{margin:8px 0 0 20px;padding:0;} li{margin-bottom:6px;}
+    .subtitle{color:#4b5563;margin-bottom:0;}
+    .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+    .linkbtn{display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;border:1px solid #d1d5db;color:#111827;background:#fff;font-weight:600;}
+    .linkbtn:hover{border-color:#9ca3af;background:#f9fafb;}
+    .sectionhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;}
+    .sectionhead a{font-size:0.95rem;color:#111827;text-decoration:underline;white-space:nowrap;}
+    .pubs{list-style:none;margin:10px 0 0 0;padding:0;}
+    .pubs li{padding:10px 0;border-bottom:1px solid #eef2f7;margin:0;}
+    .pubs li:last-child{border-bottom:none;}
+    .pubtitle{text-decoration:none;color:#111827;font-weight:700;}
+    .pubtitle:hover{text-decoration:underline;}
+    .pubmeta{margin-top:4px;font-size:0.92rem;color:#6b7280;}
+    .small{font-size:0.92rem;color:#6b7280;}
+    .langbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+    .langbar span{font-size:0.8rem;color:#9ca3af;margin-right:2px;}
+    .langtag{display:inline-block;padding:3px 9px;border-radius:5px;font-size:0.82rem;font-weight:700;
+             text-decoration:none;border:1px solid #d1d5db;color:#374151;background:#fff;letter-spacing:.04em;}
+    .langtag:hover{background:#f3f4f6;border-color:#9ca3af;}
+    .langtag.current{background:#111827;color:#fff;border-color:#111827;cursor:default;}
+    @media(min-width:760px){.container{padding:32px 20px 56px;}h1{font-size:2.1rem;}}</style>
+</head>
+<body>
+  <div class="container">
+    <nav class="langbar" aria-label="Language">
+      <span>Language:</span>
+      <a class="langtag" href="/index.html">EN</a>
+      <a class="langtag" href="/ko/index.html">KR</a>
+      <a class="langtag current" href="/ja/index.html">JP</a>
+      <a class="langtag" href="/fr/index.html">FR</a>
+      <a class="langtag" href="/ru/index.html">RU</a>
+      <a class="langtag" href="/es/index.html">ES</a>
+    </nav>
+    <section class="card">
+      <h1>中国法律実務ナレッジベース</h1>
+      <p class="subtitle">中国の紛争解決、投資コンサルティング、代理業務に関する外国企業・個人向け実務ガイダンス。</p>
+      <div class="links">
+        <a class="linkbtn" href="/dispute-resolution.html">紛争解決</a>
+        <a class="linkbtn" href="/investment-consulting.html">投資コンサルティング</a>
+        <a class="linkbtn" href="/representation-practice.html">代理業務</a>
+      </div>
+    </section>
+    <section class="card">
+      <h2>このサイトの対象読者</h2>
+      <p>本サイトは、中国に関連する法的・商業的事案を扱う外国企業、投資家、個人、社内法務チームおよび海外弁護士を対象としています。</p>
+    </section>
+    <section class="card">
+      <h2>このサイトで見つけられるもの</h2>
+      <ul><li>中国仲裁・訴訟に関する実務ガイド</li><li>契約書および紛争条項起草チェックリスト</li><li>投資・取引リスクチェックリスト</li><li>外国当事者のための手続準備ノート</li><li>外国当事者に関連する最新法律アップデート</li></ul>
+    </section>
+    <section class="card">
+      <div class="sectionhead">
+        <h2>最新の出版物</h2>
+        <a href="/ja/publications.html">すべての出版物を見る</a>
+      </div>
+      <ul class="pubs" id="recent-publications"><!-- filled by JS --></ul>
+      <p class="small" style="margin-top:10px;">多言語版：新記事の登録と同時に自動更新されます。</p>
+    </section>
+    <p class="small">このページは機械翻訳および専門的な編集を経て作成されています。</p>
+    <section class="small">免責事項：本ウェブサイトの資料は一般的な情報提供のみを目的としており、法的アドバイスを構成するものではありません。</section>
+  </div>
+  <script src="../articles-data.js"></script>
+  <script>
+    (function(){
+      var LANG="ja";
+      var list=document.getElementById("recent-publications");
+      if(!list)return;
+      var sorted=ARTICLES_DATA.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
+      var recent=sorted.slice(0,10);
+      list.innerHTML=recent.map(function(a){
+        var title=(a[LANG]&&a[LANG].title)?a[LANG].title:a.en.title;
+        var url="articles/"+a.slug+".html";
+        return "<li><a class=\"pubtitle\" href=\""+url+"\">"+title+"</a><div class=\"pubmeta\">"+a.date+"</div></li>";
+      }).join("");
+    })();
+  </script>
+</body>
+</html>

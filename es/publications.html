@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publicaciones recientes | Base de conocimientos jurídicos sobre China</title>
+  <style>
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;color:#1f2937;background:#f9fafb;}
+    .container{max-width:900px;margin:0 auto;padding:24px 16px 48px;}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;}
+    h1{font-size:1.8rem;margin:0 0 8px 0;line-height:1.25;}
+    h2{font-size:1.1rem;margin:0 0 8px 0;}
+    p{margin:0 0 10px 0;} ul{margin:8px 0 0 20px;padding:0;} li{margin-bottom:6px;}
+    .subtitle{color:#4b5563;margin-bottom:0;}
+    .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+    .linkbtn{display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;border:1px solid #d1d5db;color:#111827;background:#fff;font-weight:600;}
+    .linkbtn:hover{border-color:#9ca3af;background:#f9fafb;}
+    .sectionhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;}
+    .sectionhead a{font-size:0.95rem;color:#111827;text-decoration:underline;white-space:nowrap;}
+    .pubs{list-style:none;margin:10px 0 0 0;padding:0;}
+    .pubs li{padding:10px 0;border-bottom:1px solid #eef2f7;margin:0;}
+    .pubs li:last-child{border-bottom:none;}
+    .pubtitle{text-decoration:none;color:#111827;font-weight:700;}
+    .pubtitle:hover{text-decoration:underline;}
+    .pubmeta{margin-top:4px;font-size:0.92rem;color:#6b7280;}
+    .small{font-size:0.92rem;color:#6b7280;}
+    .langbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+    .langbar span{font-size:0.8rem;color:#9ca3af;margin-right:2px;}
+    .langtag{display:inline-block;padding:3px 9px;border-radius:5px;font-size:0.82rem;font-weight:700;
+             text-decoration:none;border:1px solid #d1d5db;color:#374151;background:#fff;letter-spacing:.04em;}
+    .langtag:hover{background:#f3f4f6;border-color:#9ca3af;}
+    .langtag.current{background:#111827;color:#fff;border-color:#111827;cursor:default;}
+    @media(min-width:760px){.container{padding:32px 20px 56px;}h1{font-size:2.1rem;}}
+    input[type="search"]{width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;font-size:1rem;background:#fff;box-sizing:border-box;margin-top:12px;}
+    .count{color:#6b7280;font-size:0.95rem;margin-top:10px;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
+    .backlink{color:#111827;text-decoration:underline;font-weight:600;white-space:nowrap;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="langbar" aria-label="Language">
+      <span>Language:</span>
+      <a class="langtag" href="/publications.html">EN</a>
+      <a class="langtag" href="/ko/publications.html">KR</a>
+      <a class="langtag" href="/ja/publications.html">JP</a>
+      <a class="langtag" href="/fr/publications.html">FR</a>
+      <a class="langtag" href="/ru/publications.html">RU</a>
+      <a class="langtag current" href="/es/publications.html">ES</a>
+    </nav>
+    <section class="card">
+      <div class="topbar">
+        <div><h1>Publicaciones recientes</h1><p class="subtitle">Versiones multilingües: se actualizan automáticamente con cada nuevo artículo.</p></div>
+        <a class="backlink" href="/es/index.html">&larr; Home</a>
+      </div>
+      <input id="search" type="search" placeholder="Search&hellip;" />
+      <div id="count" class="count"></div>
+      <ul class="pubs" id="pub-list"><!-- filled by JS --></ul>
+    </section>
+    <section class="small">Aviso legal: Los materiales de este sitio se proporcionan únicamente con fines informativos generales y no constituyen asesoramiento jurídico.</section>
+  </div>
+  <script src="../articles-data.js"></script>
+  <script>
+    (function(){
+      var LANG="es";
+      var listEl=document.getElementById("pub-list");
+      var countEl=document.getElementById("count");
+      var searchEl=document.getElementById("search");
+      function render(items){
+        countEl.textContent=items.length+" publication(s)";
+        listEl.innerHTML=items.map(function(a){
+          var title=(a[LANG]&&a[LANG].title)?a[LANG].title:a.en.title;
+          var url="articles/"+a.slug+".html";
+          return "<li><a class=\"pubtitle\" href=\""+url+"\">"+title+"</a><div class=\"pubmeta\">"+a.date+"</div></li>";
+        }).join("");
+      }
+      function getSorted(){return ARTICLES_DATA.slice().sort(function(a,b){return b.date.localeCompare(a.date);});}
+      render(getSorted());
+      searchEl.addEventListener("input",function(){
+        var q=(searchEl.value||"").trim().toLowerCase();
+        var base=getSorted();
+        render(q?base.filter(function(a){
+          var t=(a[LANG]&&a[LANG].title)?a[LANG].title:a.en.title;
+          return t.toLowerCase().indexOf(q)!==-1;
+        }):base);
+      });
+    })();
+  </script>
+</body>
+</html>
