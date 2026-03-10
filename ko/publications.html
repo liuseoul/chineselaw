@@ -70,7 +70,7 @@
         countEl.textContent=items.length+" publication(s)";
         listEl.innerHTML=items.map(function(a){
           var title=(a[LANG]&&a[LANG].title)?a[LANG].title:a.en.title;
-          var url="articles/"+a.slug+".html";
+          var url=(a[LANG]&&a[LANG].title)?("articles/"+a.slug+".html"):("/articles/"+a.slug+".html");
           return "<li><a class=\"pubtitle\" href=\""+url+"\">"+title+"</a><div class=\"pubmeta\">"+a.date+"</div></li>";
         }).join("");
       }

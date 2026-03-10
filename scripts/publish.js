@@ -3,10 +3,11 @@
  * scripts/publish.js
  * ─────────────────────────────────────────────────────────────────────────────
  * USAGE (from project root):
- *   npm run publish
- *   node scripts/publish.js
+ *   npm run publish                       – process new .txt files in articles-src/
+ *   node scripts/publish.js --retranslate – re-translate articles that have
+ *                                           null language entries in articles-data.js
  *
- * WHAT IT DOES:
+ * WHAT IT DOES (normal mode):
  *   1. Scans articles-src/ for new .txt files not yet in articles-data.js
  *   2. For each new article:
  *      a. Parses title (first line) and body (rest)
@@ -14,6 +15,13 @@
  *      c. Generates HTML article pages for all 6 languages
  *      d. Updates articles-data.js with the new entry (prepended = newest first)
  *   3. Prints a summary. Then you `git add . && git commit && git push`.
+ *
+ * WHAT IT DOES (--retranslate mode):
+ *   1. Finds all articles in articles-data.js that have any null language entry
+ *   2. Locates the matching .txt file in articles-src/
+ *   3. Re-translates only the missing languages
+ *   4. Generates the missing HTML article pages
+ *   5. Updates articles-data.js
  *
  * ARTICLE TXT FORMAT (save in articles-src/):
  *   Filename:  YYYY-MM-DD-your-slug.txt    e.g. 2026-03-15-vto-checklist.txt
@@ -224,16 +232,64 @@ function articleHtml(lang, slug, title, bodyHtml, date, allLangs) {
 </html>`;
 }
 
-// ── Main ──────────────────────────────────────────────────────────────────────
+// ── Translate and generate files for one entry ─────────────────────────────
 
-async function main() {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("ERROR: ANTHROPIC_API_KEY not set. Create a .env file with:\n  ANTHROPIC_API_KEY=sk-ant-...");
-    process.exit(1);
+async function translateAndGenerate(client, entry, body, langsToTranslate) {
+  const { date, slug } = entry;
+  const enTitle = entry.en.title;
+
+  // Translate missing languages in parallel
+  console.log(`  Translating to ${langsToTranslate.map(l => l.toUpperCase()).join(", ")} (parallel)…`);
+  const results = await Promise.allSettled(
+    langsToTranslate.map(lang => translate(client, lang, enTitle, body))
+  );
+
+  const translations = {};
+  results.forEach((res, i) => {
+    const lang = langsToTranslate[i];
+    if (res.status === "fulfilled") {
+      translations[lang] = res.value;
+      entry[lang] = { title: res.value.title };
+      console.log(`  ✓ ${lang.toUpperCase()} — "${res.value.title}"`);
+    } else {
+      const err = res.reason;
+      console.warn(`  ✗ ${lang.toUpperCase()} FAILED:`);
+      console.warn(`      ${err.message || err}`);
+      if (err.status) console.warn(`      HTTP status: ${err.status}`);
+      if (err.error)  console.warn(`      API error:   ${JSON.stringify(err.error)}`);
+    }
+  });
+
+  // Generate English article HTML (only if it doesn't already exist)
+  const enArticleDir = path.join(ROOT, "articles");
+  const enArticlePath = path.join(enArticleDir, `${slug}.html`);
+  if (!fs.existsSync(enArticlePath)) {
+    const enBodyHtml = bodyToHtml(body);
+    fs.mkdirSync(enArticleDir, { recursive: true });
+    fs.writeFileSync(enArticlePath, articleHtml("en", slug, enTitle, enBodyHtml, date, entry), "utf8");
+    console.log(`  ✓ articles/${slug}.html`);
   }
-  const AnthropicClient = Anthropic.default ?? Anthropic;
-  const client = new AnthropicClient({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+  // Generate language article HTML files for newly translated languages
+  for (const lang of langsToTranslate) {
+    if (!translations[lang]) continue;
+    const { title: ltitle, bodyHtml: lbody } = translations[lang];
+    const langArticleDir = path.join(ROOT, lang, "articles");
+    fs.mkdirSync(langArticleDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(langArticleDir, `${slug}.html`),
+      articleHtml(lang, slug, ltitle, lbody, date, entry),
+      "utf8"
+    );
+    console.log(`  ✓ ${lang}/articles/${slug}.html`);
+  }
+
+  return translations;
+}
+
+// ── Main: normal publish mode ─────────────────────────────────────────────────
+
+async function mainPublish(client) {
   // Load existing articles
   const articles = loadArticlesData();
   const existingSlugs = new Set(articles.map(a => a.slug));
@@ -250,6 +306,8 @@ async function main() {
 
   if (newFiles.length === 0) {
     console.log("No new articles found in articles-src/. Nothing to do.");
+    console.log("Tip: to re-translate articles with missing translations, run:");
+    console.log("     node scripts/publish.js --retranslate");
     return;
   }
 
@@ -262,48 +320,7 @@ async function main() {
     // Build entry
     const entry = { date, slug, en: { title }, ko: null, ja: null, fr: null, ru: null, es: null };
 
-    // Translate to all 5 languages in parallel
-    console.log("  Translating to KR, JP, FR, RU, ES (parallel)…");
-    const results = await Promise.allSettled(
-      LANGS.map(lang => translate(client, lang, title, body))
-    );
-
-    const translations = {};
-    results.forEach((res, i) => {
-      const lang = LANGS[i];
-      if (res.status === "fulfilled") {
-        translations[lang] = res.value;
-        entry[lang] = { title: res.value.title };
-        console.log(`  ✓ ${lang.toUpperCase()} — "${res.value.title}"`);
-      } else {
-        console.warn(`  ✗ ${lang.toUpperCase()} failed: ${res.reason.message}`);
-      }
-    });
-
-    // Generate English article HTML
-    const enBodyHtml = bodyToHtml(body);
-    const enArticleDir = path.join(ROOT, "articles");
-    fs.mkdirSync(enArticleDir, { recursive: true });
-    fs.writeFileSync(
-      path.join(enArticleDir, `${slug}.html`),
-      articleHtml("en", slug, title, enBodyHtml, date, entry),
-      "utf8"
-    );
-    console.log(`  ✓ en/articles/${slug}.html`);
-
-    // Generate language article HTML files
-    for (const lang of LANGS) {
-      if (!translations[lang]) continue;
-      const { title: ltitle, bodyHtml: lbody } = translations[lang];
-      const langArticleDir = path.join(ROOT, lang, "articles");
-      fs.mkdirSync(langArticleDir, { recursive: true });
-      fs.writeFileSync(
-        path.join(langArticleDir, `${slug}.html`),
-        articleHtml(lang, slug, ltitle, lbody, date, entry),
-        "utf8"
-      );
-      console.log(`  ✓ ${lang}/articles/${slug}.html`);
-    }
+    await translateAndGenerate(client, entry, body, LANGS);
 
     // Prepend to articles array (newest first in data file)
     articles.unshift(entry);
@@ -318,7 +335,88 @@ async function main() {
   console.log("\n   Cloudflare Pages will auto-deploy within ~1 minute.");
 }
 
+// ── Main: retranslate mode ────────────────────────────────────────────────────
+
+async function mainRetranslate(client) {
+  const articles = loadArticlesData();
+
+  // Find articles with at least one null language entry
+  const needsWork = articles.filter(a =>
+    LANGS.some(l => a[l] === null || a[l] === undefined)
+  );
+
+  if (needsWork.length === 0) {
+    console.log("All articles already have translations for all languages. Nothing to do.");
+    return;
+  }
+
+  console.log(`Found ${needsWork.length} article(s) with missing translations.\n`);
+
+  // Build a map of slug → txt file
+  const txtFiles = fs.readdirSync(SRC_DIR).filter(f => f.endsWith(".txt"));
+  const slugToFile = {};
+  for (const f of txtFiles) {
+    const { slug } = parseTxt(path.join(SRC_DIR, f));
+    slugToFile[slug] = path.join(SRC_DIR, f);
+  }
+
+  let anyUpdated = false;
+
+  for (const entry of needsWork) {
+    const missingLangs = LANGS.filter(l => entry[l] === null || entry[l] === undefined);
+    console.log(`\nRetranslating: "${entry.en.title}" (${entry.date})`);
+    console.log(`  Missing languages: ${missingLangs.map(l => l.toUpperCase()).join(", ")}`);
+
+    // Find the source TXT
+    const txtFile = slugToFile[entry.slug];
+    if (!txtFile) {
+      console.warn(`  ✗ Cannot find source .txt file for slug "${entry.slug}" in articles-src/`);
+      console.warn(`    Expected a file like: articles-src/${entry.date}-${entry.slug}.txt`);
+      continue;
+    }
+
+    const { body } = parseTxt(txtFile);
+
+    await translateAndGenerate(client, entry, body, missingLangs);
+    anyUpdated = true;
+  }
+
+  if (anyUpdated) {
+    saveArticlesData(articles);
+    console.log("\n  ✓ articles-data.js updated");
+
+    console.log("\n✅ Done! Next steps:");
+    console.log("   git add .");
+    console.log('   git commit -m "Add missing translations"');
+    console.log("   git push");
+    console.log("\n   Cloudflare Pages will auto-deploy within ~1 minute.");
+  } else {
+    console.log("\nNo articles could be updated (source .txt files missing).");
+  }
+}
+
+// ── Entry point ───────────────────────────────────────────────────────────────
+
+async function main() {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error("ERROR: ANTHROPIC_API_KEY not set. Create a .env file with:\n  ANTHROPIC_API_KEY=sk-ant-...");
+    process.exit(1);
+  }
+  const AnthropicClient = Anthropic.default ?? Anthropic;
+  const client = new AnthropicClient({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+  const retranslate = process.argv.includes("--retranslate");
+  if (retranslate) {
+    console.log("=== RETRANSLATE MODE ===\n");
+    await mainRetranslate(client);
+  } else {
+    await mainPublish(client);
+  }
+}
+
 main().catch(err => {
   console.error("\nFatal error:", err.message || err);
+  if (err.status)  console.error("HTTP status:", err.status);
+  if (err.error)   console.error("API error:",   JSON.stringify(err.error, null, 2));
   process.exit(1);
 });
