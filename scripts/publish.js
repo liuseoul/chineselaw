@@ -2,59 +2,55 @@
 /**
  * scripts/publish.js
  * ─────────────────────────────────────────────────────────────────────────────
- * USAGE (from project root):
- *   npm run publish                       – process new .txt files in articles-src/
- *   node scripts/publish.js --retranslate – re-translate articles that have
- *                                           null language entries in articles-data.js
+ * USAGE:
+ *   node scripts/publish.js          (or: npm run publish)
  *
- * WHAT IT DOES (normal mode):
- *   1. Scans articles-src/ for new .txt files not yet in articles-data.js
- *   2. For each new article:
- *      a. Parses title (first line) and body (rest)
- *      b. Calls Claude API to translate into KR / JP / FR / RU / ES
- *      c. Generates HTML article pages for all 6 languages
- *      d. Updates articles-data.js with the new entry (prepended = newest first)
- *   3. Prints a summary. Then you `git add . && git commit && git push`.
+ * HOW TO PUBLISH AN ARTICLE:
+ *   1. Translate your article into the languages you want.
+ *   2. Save each version as a text file in articles-src/ using this naming:
  *
- * WHAT IT DOES (--retranslate mode):
- *   1. Finds all articles in articles-data.js that have any null language entry
- *   2. Locates the matching .txt file in articles-src/
- *   3. Re-translates only the missing languages
- *   4. Generates the missing HTML article pages
- *   5. Updates articles-data.js
+ *        YYYYMMDD-en.txt   (English  — required for new articles)
+ *        YYYYMMDD-kr.txt   (Korean)
+ *        YYYYMMDD-jp.txt   (Japanese)
+ *        YYYYMMDD-fr.txt   (French)
+ *        YYYYMMDD-ru.txt   (Russian)
+ *        YYYYMMDD-es.txt   (Spanish)
  *
- * ARTICLE TXT FORMAT (save in articles-src/):
- *   Filename:  YYYY-MM-DD-your-slug.txt    e.g. 2026-03-15-vto-checklist.txt
- *              (date from filename; slug = part after the date)
- *   Line 1:    Article title in English
- *   Line 2+:   Article body (plain paragraphs, blank line = new paragraph)
+ *      Example: 20260315-en.txt, 20260315-kr.txt, 20260315-fr.txt
  *
- * REQUIREMENTS:
- *   npm install @anthropic-ai/sdk dotenv
- *   Create .env with:  ANTHROPIC_API_KEY=sk-ant-...
+ *   3. File format (same for all languages):
+ *        Line 1:   Article title
+ *        Line 2+:  Article body (blank line = paragraph break)
+ *
+ *   4. You don't need all 6 languages at once.
+ *      Missing languages fall back to the English article link.
+ *      To add more languages to an existing article later, just drop the new
+ *      YYYYMMDD-lang.txt file(s) in articles-src/ and re-run.
+ *
+ *   5. Run: node scripts/publish.js
+ *
+ *   6. Commit and push:
+ *        git add .
+ *        git commit -m "Publish article YYYYMMDD"
+ *        git push
+ *      Cloudflare Pages auto-deploys in ~1 minute.
  */
 
 "use strict";
 const fs   = require("fs");
 const path = require("path");
+const vm   = require("vm");
 
-// ── Load env & SDK ────────────────────────────────────────────────────────────
-require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
-const Anthropic = require("@anthropic-ai/sdk");
+const ROOT      = path.join(__dirname, "..");
+const SRC_DIR   = path.join(ROOT, "articles-src");
+const DATA_FILE = path.join(ROOT, "articles-data.js");
 
-const ROOT        = path.join(__dirname, "..");
-const SRC_DIR     = path.join(ROOT, "articles-src");
-const DATA_FILE   = path.join(ROOT, "articles-data.js");
+// File suffix (user-facing) → internal language code used in dirs + data
+const FILE_LANG = { en:"en", kr:"ko", jp:"ja", fr:"fr", ru:"ru", es:"es" };
 
-const LANGS = ["ko", "ja", "fr", "ru", "es"];
-const LANG_NAMES = {
-  ko: "Korean", ja: "Japanese", fr: "French", ru: "Russian", es: "Spanish",
-};
-const LANG_TAGS = {
-  en: "EN", ko: "KR", ja: "JP", fr: "FR", ru: "RU", es: "ES",
-};
-const LANG_LABELS = {
-  en: "English", ko: "한국어", ja: "日本語", fr: "Français", ru: "Русский", es: "Español",
+const LANG_TAGS = { en:"EN", ko:"KR", ja:"JP", fr:"FR", ru:"RU", es:"ES" };
+const HOME_LABEL = {
+  en:"Home", ko:"홈", ja:"ホーム", fr:"Accueil", ru:"Главная", es:"Inicio",
 };
 const DISCLAIMER = {
   en: "Disclaimer: The materials on this website are provided for general informational purposes only and do not constitute legal advice. Viewing this website or contacting us does not create a lawyer-client relationship.",
@@ -64,8 +60,13 @@ const DISCLAIMER = {
   ru: "Отказ от ответственности: Материалы на этом сайте предоставляются исключительно в информационных целях и не являются юридической консультацией.",
   es: "Aviso legal: Los materiales de este sitio se proporcionan únicamente con fines informativos generales y no constituyen asesoramiento jurídico.",
 };
-const HOME_LABEL = {
-  en: "Home", ko: "홈", ja: "ホーム", fr: "Accueil", ru: "Главная", es: "Inicio",
+const SITE_TITLE = {
+  en: "China Legal Practice Knowledge Base",
+  ko: "중국 법률 실무 지식 베이스",
+  ja: "中国法律実務ナレッジベース",
+  fr: "Base de connaissances en droit chinois",
+  ru: "База знаний по китайскому праву",
+  es: "Base de conocimientos jurídicos sobre China",
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -80,119 +81,66 @@ function slugify(text) {
     .slice(0, 80);
 }
 
-/** Parse a txt file → { date, slug, title, body } */
-function parseTxt(file) {
-  const basename = path.basename(file, ".txt");
-  // Expect filename: YYYY-MM-DD-slug  OR just: slug
-  const dateMatch = basename.match(/^(\d{4}-\d{2}-\d{2})-(.+)$/);
-  const date = dateMatch ? dateMatch[1] : new Date().toISOString().slice(0, 10);
-  const slugFromFile = dateMatch ? dateMatch[2] : slugify(basename);
+/** YYYYMMDD → YYYY-MM-DD */
+function isoDate(yyyymmdd) {
+  return `${yyyymmdd.slice(0,4)}-${yyyymmdd.slice(4,6)}-${yyyymmdd.slice(6,8)}`;
+}
 
-  const raw = fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n");
+/** Parse a text file → { title, bodyHtml } */
+function parseTxt(filePath) {
+  const raw = fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n");
   const lines = raw.split("\n");
   const title = lines[0].replace(/^#+\s*/, "").trim();
   const body  = lines.slice(1).join("\n").trim();
-  return { date, slug: slugFromFile, title, body };
+  const bodyHtml = body
+    .split(/\n{2,}/)
+    .map(p => p.replace(/\n/g, " ").trim())
+    .filter(Boolean)
+    .map(p => `<p>${p}</p>`)
+    .join("\n    ");
+  return { title, bodyHtml };
 }
 
-/** Load the current ARTICLES_DATA array from articles-data.js.
- *  Uses Node's vm module so unquoted JS keys parse correctly. */
+/** Load ARTICLES_DATA from articles-data.js (handles unquoted JS keys) */
 function loadArticlesData() {
   const src = fs.readFileSync(DATA_FILE, "utf8");
-  // Greedy match — captures the FULL array up to the final ];
   const match = src.match(/var ARTICLES_DATA\s*=\s*(\[[\s\S]*\]);/);
   if (!match) throw new Error("Cannot find ARTICLES_DATA in articles-data.js");
-  const vm = require("vm");
   const ctx = vm.createContext({});
   vm.runInContext("result = " + match[1], ctx);
   return ctx.result;
 }
 
-/** Rewrite articles-data.js with updated array (saves as valid JSON — fine for browsers). */
+/** Write updated ARTICLES_DATA back to articles-data.js */
 function saveArticlesData(articles) {
   const src = fs.readFileSync(DATA_FILE, "utf8");
-  const serialised = JSON.stringify(articles, null, 2);
-  // Greedy replace — replaces the FULL old array block
   const updated = src.replace(
     /var ARTICLES_DATA\s*=\s*\[[\s\S]*\];/,
-    "var ARTICLES_DATA = " + serialised + ";"
+    "var ARTICLES_DATA = " + JSON.stringify(articles, null, 2) + ";"
   );
   fs.writeFileSync(DATA_FILE, updated, "utf8");
 }
 
-/** Ask Claude to translate the article into one language.
- *  Returns { title, bodyHtml } */
-async function translate(client, lang, enTitle, enBody) {
-  const langName = LANG_NAMES[lang];
-  const prompt = `You are a professional legal translator specialising in Chinese law practice content.
-
-Translate the following English law article into ${langName}.
-Preserve all meaning precisely and use formal, professional register suitable for legal practitioners.
-
-Return ONLY a JSON object (no markdown) with exactly these two fields:
-{
-  "title": "<translated title>",
-  "bodyHtml": "<article body as HTML paragraphs — wrap each paragraph in <p>...</p>>"
-}
-
-ENGLISH TITLE:
-${enTitle}
-
-ENGLISH BODY:
-${enBody}`;
-
-  const msg = await client.messages.create({
-    model: "claude-3-5-sonnet-20241022",
-    max_tokens: 4096,
-    messages: [{ role: "user", content: prompt }],
-  });
-
-  const raw = msg.content[0].text.trim();
-  // Strip possible markdown code fences
-  const jsonStr = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
-  return JSON.parse(jsonStr);
-}
-
-/** Convert plain-text body into HTML paragraphs */
-function bodyToHtml(body) {
-  return body
-    .split(/\n{2,}/)
-    .map(para => para.replace(/\n/g, " ").trim())
-    .filter(Boolean)
-    .map(para => `<p>${para}</p>`)
-    .join("\n    ");
-}
-
-/** Generate one article HTML page */
-function articleHtml(lang, slug, title, bodyHtml, date, allLangs) {
-  const isEn = lang === "en";
+/**
+ * Generate one article HTML page.
+ *
+ * The language switcher is DYNAMIC — it loads articles-data.js at runtime,
+ * so adding a new language later automatically updates all switchers without
+ * regenerating old HTML files.
+ *
+ * lang:     internal code  ("en", "ko", "ja", "fr", "ru", "es")
+ * dataPath: relative path from this HTML file to articles-data.js
+ */
+function makeArticleHtml(lang, slug, title, bodyHtml, date, dataPath) {
+  const isEn    = lang === "en";
   const homeHref = isEn ? "/index.html" : `/${lang}/index.html`;
-  const htmlLang = lang === "ko" ? "ko" : lang === "ja" ? "ja" : lang === "fr" ? "fr" : lang === "ru" ? "ru" : lang === "es" ? "es" : "en";
-  const siteTitle = isEn ? "China Legal Practice Knowledge Base" : {
-    ko: "중국 법률 실무 지식 베이스",
-    ja: "中国法律実務ナレッジベース",
-    fr: "Base de connaissances en droit chinois",
-    ru: "База знаний по китайскому праву",
-    es: "Base de conocimientos jurídicos sobre China",
-  }[lang];
-
-  // Build language switcher links for this article
-  const langLinks = ["en", "ko", "ja", "fr", "ru", "es"].map(l => {
-    const href = l === "en"
-      ? `/articles/${slug}.html`
-      : `/${l}/articles/${slug}.html`;
-    const hasTranslation = allLangs[l] && allLangs[l].title;
-    if (!hasTranslation && l !== "en") return null;
-    const cls = l === lang ? " current" : "";
-    return `<a class="langtag${cls}" href="${href}">${LANG_TAGS[l]}</a>`;
-  }).filter(Boolean).join("\n      ");
 
   return `<!doctype html>
-<html lang="${htmlLang}">
+<html lang="${lang === "ko" ? "ko" : lang === "ja" ? "ja" : lang}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title} | ${siteTitle}</title>
+  <title>${title} | ${SITE_TITLE[lang]}</title>
   <style>
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.7;color:#1f2937;background:#f9fafb;}
     .container{max-width:860px;margin:0 auto;padding:24px 16px 56px;}
@@ -214,9 +162,9 @@ function articleHtml(lang, slug, title, bodyHtml, date, allLangs) {
 </head>
 <body>
   <div class="container">
-    <nav class="langbar" aria-label="Language">
+    <nav class="langbar" id="langbar" aria-label="Language">
       <span>Language:</span>
-      ${langLinks}
+      <!-- filled dynamically by JS below -->
     </nav>
     <a class="backlink" href="${homeHref}">&larr; ${HOME_LABEL[lang]}</a>
     <article class="card">
@@ -228,195 +176,135 @@ function articleHtml(lang, slug, title, bodyHtml, date, allLangs) {
     </article>
     <p class="small">${DISCLAIMER[lang]}</p>
   </div>
+  <script src="${dataPath}"></script>
+  <script>
+    (function(){
+      var SLUG="${slug}";
+      var LANG="${lang}";
+      var TAGS={en:"EN",ko:"KR",ja:"JP",fr:"FR",ru:"RU",es:"ES"};
+      var entry=ARTICLES_DATA.find(function(a){return a.slug===SLUG;});
+      if(!entry) return;
+      var bar=document.getElementById("langbar");
+      var links=["en","ko","ja","fr","ru","es"].map(function(l){
+        if(l!=="en"&&!(entry[l]&&entry[l].title)) return "";
+        var href=l==="en"?"/articles/"+SLUG+".html":"/"+l+"/articles/"+SLUG+".html";
+        var cls=l===LANG?" current":"";
+        return "<a class=\"langtag"+cls+"\" href=\""+href+"\">"+TAGS[l]+"</a>";
+      }).join("");
+      bar.innerHTML="<span>Language:<\\/span>"+links;
+    })();
+  </script>
 </body>
 </html>`;
 }
 
-// ── Translate and generate files for one entry ─────────────────────────────
+// ── Main ──────────────────────────────────────────────────────────────────────
 
-async function translateAndGenerate(client, entry, body, langsToTranslate) {
-  const { date, slug } = entry;
-  const enTitle = entry.en.title;
+function main() {
+  // ── Step 1: Scan articles-src/ and group by date ────────────────────────
+  const PATTERN = /^(\d{8})-(en|kr|jp|fr|ru|es)\.txt$/i;
+  const allFiles = fs.readdirSync(SRC_DIR).filter(f => f.endsWith(".txt"));
 
-  // Translate missing languages in parallel
-  console.log(`  Translating to ${langsToTranslate.map(l => l.toUpperCase()).join(", ")} (parallel)…`);
-  const results = await Promise.allSettled(
-    langsToTranslate.map(lang => translate(client, lang, enTitle, body))
-  );
-
-  const translations = {};
-  results.forEach((res, i) => {
-    const lang = langsToTranslate[i];
-    if (res.status === "fulfilled") {
-      translations[lang] = res.value;
-      entry[lang] = { title: res.value.title };
-      console.log(`  ✓ ${lang.toUpperCase()} — "${res.value.title}"`);
-    } else {
-      const err = res.reason;
-      console.warn(`  ✗ ${lang.toUpperCase()} FAILED:`);
-      console.warn(`      ${err.message || err}`);
-      if (err.status) console.warn(`      HTTP status: ${err.status}`);
-      if (err.error)  console.warn(`      API error:   ${JSON.stringify(err.error)}`);
-    }
-  });
-
-  // Generate English article HTML (only if it doesn't already exist)
-  const enArticleDir = path.join(ROOT, "articles");
-  const enArticlePath = path.join(enArticleDir, `${slug}.html`);
-  if (!fs.existsSync(enArticlePath)) {
-    const enBodyHtml = bodyToHtml(body);
-    fs.mkdirSync(enArticleDir, { recursive: true });
-    fs.writeFileSync(enArticlePath, articleHtml("en", slug, enTitle, enBodyHtml, date, entry), "utf8");
-    console.log(`  ✓ articles/${slug}.html`);
+  /** groups: { "20260311": { en: "/abs/path", kr: "/abs/path", ... } } */
+  const groups = {};
+  for (const f of allFiles) {
+    const m = f.match(PATTERN);
+    if (!m) { console.log(`  (skipping unrecognized file: ${f})`); continue; }
+    const [, yyyymmdd, fileLang] = m;
+    if (!groups[yyyymmdd]) groups[yyyymmdd] = {};
+    groups[yyyymmdd][fileLang.toLowerCase()] = path.join(SRC_DIR, f);
   }
 
-  // Generate language article HTML files for newly translated languages
-  for (const lang of langsToTranslate) {
-    if (!translations[lang]) continue;
-    const { title: ltitle, bodyHtml: lbody } = translations[lang];
-    const langArticleDir = path.join(ROOT, lang, "articles");
-    fs.mkdirSync(langArticleDir, { recursive: true });
-    fs.writeFileSync(
-      path.join(langArticleDir, `${slug}.html`),
-      articleHtml(lang, slug, ltitle, lbody, date, entry),
-      "utf8"
-    );
-    console.log(`  ✓ ${lang}/articles/${slug}.html`);
-  }
-
-  return translations;
-}
-
-// ── Main: normal publish mode ─────────────────────────────────────────────────
-
-async function mainPublish(client) {
-  // Load existing articles
-  const articles = loadArticlesData();
-  const existingSlugs = new Set(articles.map(a => a.slug));
-
-  // Find unprocessed TXT files
-  const txtFiles = fs.readdirSync(SRC_DIR)
-    .filter(f => f.endsWith(".txt"))
-    .map(f => path.join(SRC_DIR, f));
-
-  const newFiles = txtFiles.filter(f => {
-    const { slug } = parseTxt(f);
-    return !existingSlugs.has(slug);
-  });
-
-  if (newFiles.length === 0) {
-    console.log("No new articles found in articles-src/. Nothing to do.");
-    console.log("Tip: to re-translate articles with missing translations, run:");
-    console.log("     node scripts/publish.js --retranslate");
+  if (Object.keys(groups).length === 0) {
+    console.log("No article files found in articles-src/.");
+    console.log("Expected filenames like: 20260315-en.txt, 20260315-kr.txt, ...");
     return;
   }
 
-  console.log(`Found ${newFiles.length} new article(s) to process.\n`);
-
-  for (const file of newFiles) {
-    const { date, slug, title, body } = parseTxt(file);
-    console.log(`\nProcessing: "${title}" (${date}, slug: ${slug})`);
-
-    // Build entry
-    const entry = { date, slug, en: { title }, ko: null, ja: null, fr: null, ru: null, es: null };
-
-    await translateAndGenerate(client, entry, body, LANGS);
-
-    // Prepend to articles array (newest first in data file)
-    articles.unshift(entry);
-    saveArticlesData(articles);
-    console.log(`  ✓ articles-data.js updated`);
-  }
-
-  console.log("\n✅ Done! Next steps:");
-  console.log("   git add .");
-  console.log('   git commit -m "Add new article(s)"');
-  console.log("   git push");
-  console.log("\n   Cloudflare Pages will auto-deploy within ~1 minute.");
-}
-
-// ── Main: retranslate mode ────────────────────────────────────────────────────
-
-async function mainRetranslate(client) {
+  // ── Step 2: Load current articles-data.js ──────────────────────────────
   const articles = loadArticlesData();
 
-  // Find articles with at least one null language entry
-  const needsWork = articles.filter(a =>
-    LANGS.some(l => a[l] === null || a[l] === undefined)
-  );
+  // Index by date for quick lookup
+  const byDate = {};
+  for (const a of articles) byDate[a.date] = a;
 
-  if (needsWork.length === 0) {
-    console.log("All articles already have translations for all languages. Nothing to do.");
-    return;
-  }
+  let anyChanges = false;
 
-  console.log(`Found ${needsWork.length} article(s) with missing translations.\n`);
+  // ── Step 3: Process each date group (oldest first) ─────────────────────
+  for (const yyyymmdd of Object.keys(groups).sort()) {
+    const files   = groups[yyyymmdd];
+    const date    = isoDate(yyyymmdd);
+    const isNew   = !byDate[date];
 
-  // Build a map of slug → txt file
-  const txtFiles = fs.readdirSync(SRC_DIR).filter(f => f.endsWith(".txt"));
-  const slugToFile = {};
-  for (const f of txtFiles) {
-    const { slug } = parseTxt(path.join(SRC_DIR, f));
-    slugToFile[slug] = path.join(SRC_DIR, f);
-  }
+    console.log(`\n── ${date} ── files: ${Object.keys(files).map(l=>`${l}.txt`).join(", ")}`);
 
-  let anyUpdated = false;
-
-  for (const entry of needsWork) {
-    const missingLangs = LANGS.filter(l => entry[l] === null || entry[l] === undefined);
-    console.log(`\nRetranslating: "${entry.en.title}" (${entry.date})`);
-    console.log(`  Missing languages: ${missingLangs.map(l => l.toUpperCase()).join(", ")}`);
-
-    // Find the source TXT
-    const txtFile = slugToFile[entry.slug];
-    if (!txtFile) {
-      console.warn(`  ✗ Cannot find source .txt file for slug "${entry.slug}" in articles-src/`);
-      console.warn(`    Expected a file like: articles-src/${entry.date}-${entry.slug}.txt`);
+    // New article requires English
+    if (isNew && !files.en) {
+      console.warn(`  ✗ Skipped — new article needs ${yyyymmdd}-en.txt to set the title and slug.`);
       continue;
     }
 
-    const { body } = parseTxt(txtFile);
+    // Build / get the data entry
+    let entry;
+    if (isNew) {
+      const { title } = parseTxt(files.en);
+      const slug = slugify(title);
+      entry = { date, slug, en:{ title }, ko:null, ja:null, fr:null, ru:null, es:null };
+      console.log(`  New article  : "${title}"`);
+      console.log(`  Slug         : ${slug}`);
+    } else {
+      entry = byDate[date];
+      console.log(`  Existing     : "${entry.en.title}" (slug: ${entry.slug})`);
+    }
 
-    await translateAndGenerate(client, entry, body, missingLangs);
-    anyUpdated = true;
+    const slug = entry.slug;
+
+    // ── Step 4: For each supplied language file, generate HTML ─────────
+    for (const [fileLang, filePath] of Object.entries(files)) {
+      const lang = FILE_LANG[fileLang];           // e.g. "kr" → "ko"
+      const { title, bodyHtml } = parseTxt(filePath);
+
+      // Update the data entry
+      entry[lang] = { title };
+
+      // Paths
+      const isEnglish = lang === "en";
+      const articleDir  = isEnglish
+        ? path.join(ROOT, "articles")
+        : path.join(ROOT, lang, "articles");
+      const dataPath    = isEnglish ? "../articles-data.js" : "../../articles-data.js";
+
+      fs.mkdirSync(articleDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(articleDir, `${slug}.html`),
+        makeArticleHtml(lang, slug, title, bodyHtml, date, dataPath),
+        "utf8"
+      );
+      const display = isEnglish ? `articles/${slug}.html` : `${lang}/articles/${slug}.html`;
+      console.log(`  ✓ ${display}`);
+    }
+
+    // Add new entry to front of array
+    if (isNew) {
+      articles.unshift(entry);
+      byDate[date] = entry;
+    }
+
+    anyChanges = true;
   }
 
-  if (anyUpdated) {
+  // ── Step 5: Save and report ───────────────────────────────────────────
+  if (anyChanges) {
     saveArticlesData(articles);
     console.log("\n  ✓ articles-data.js updated");
-
-    console.log("\n✅ Done! Next steps:");
-    console.log("   git add .");
-    console.log('   git commit -m "Add missing translations"');
-    console.log("   git push");
-    console.log("\n   Cloudflare Pages will auto-deploy within ~1 minute.");
+    console.log("\n✅  Done! Next steps:");
+    console.log("      git add .");
+    console.log('      git commit -m "Publish article"');
+    console.log("      git push");
+    console.log("      (Cloudflare Pages auto-deploys in ~1 minute)");
   } else {
-    console.log("\nNo articles could be updated (source .txt files missing).");
+    console.log("\nNothing changed.");
   }
 }
 
-// ── Entry point ───────────────────────────────────────────────────────────────
-
-async function main() {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error("ERROR: ANTHROPIC_API_KEY not set. Create a .env file with:\n  ANTHROPIC_API_KEY=sk-ant-...");
-    process.exit(1);
-  }
-  const AnthropicClient = Anthropic.default ?? Anthropic;
-  const client = new AnthropicClient({ apiKey: process.env.ANTHROPIC_API_KEY });
-
-  const retranslate = process.argv.includes("--retranslate");
-  if (retranslate) {
-    console.log("=== RETRANSLATE MODE ===\n");
-    await mainRetranslate(client);
-  } else {
-    await mainPublish(client);
-  }
-}
-
-main().catch(err => {
-  console.error("\nFatal error:", err.message || err);
-  if (err.status)  console.error("HTTP status:", err.status);
-  if (err.error)   console.error("API error:",   JSON.stringify(err.error, null, 2));
-  process.exit(1);
-});
+main();

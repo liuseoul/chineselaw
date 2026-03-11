@@ -6,9 +6,5 @@
   "scripts": {
     "publish": "node scripts/publish.js",
     "dev": "wrangler dev"
-  },
-  "devDependencies": {
-    "@anthropic-ai/sdk": "^0.52.0",
-    "dotenv": "^16.0.0"
   }
 }

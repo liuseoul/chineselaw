@@ -15,6 +15,28 @@
 
 var ARTICLES_DATA = [
   {
+    "date": "2026-03-11",
+    "slug": "website-test-notice-and-upcoming-content-preview",
+    "en": {
+      "title": "Website Test Notice and Upcoming Content Preview"
+    },
+    "ko": {
+      "title": "웹사이트 테스트 공지 및 예정 콘텐츠 미리보기"
+    },
+    "ja": {
+      "title": "ウェブサイトテストのお知らせおよび今後のコンテンツ予告"
+    },
+    "fr": {
+      "title": "Avis de test du site Web et aperçu des contenus à venir"
+    },
+    "ru": {
+      "title": "Уведомление о тестировании веб-сайта и анонс предстоящих материалов"
+    },
+    "es": {
+      "title": "Aviso de prueba del sitio web y adelanto del contenido próximo"
+    }
+  },
+  {
     "date": "2026-03-09",
     "slug": "20260309-test",
     "en": {
