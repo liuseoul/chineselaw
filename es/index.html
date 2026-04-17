@@ -4,37 +4,61 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Base de conocimientos jurídicos sobre China</title>
-  <meta name="description" content="Guía práctica para empresas y particulares extranjeros sobre resolución de disputas en China, consultoría de inversiones y práctica de representación." />
+  <meta name="description" content="Guía práctica para empresas y particulares extranjeros sobre resolución de disputas en China, consultoría jurídica, consultoría de inversiones y práctica de representación." />
   <style>
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;color:#1f2937;background:#f9fafb;}
-    .container{max-width:900px;margin:0 auto;padding:24px 16px 48px;}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;}
-    h1{font-size:1.8rem;margin:0 0 8px 0;line-height:1.25;}
-    h2{font-size:1.1rem;margin:0 0 8px 0;}
-    p{margin:0 0 10px 0;} ul{margin:8px 0 0 20px;padding:0;} li{margin-bottom:6px;}
-    .subtitle{color:#4b5563;margin-bottom:0;}
-    .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
-    .linkbtn{display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;border:1px solid #d1d5db;color:#111827;background:#fff;font-weight:600;}
-    .linkbtn:hover{border-color:#9ca3af;background:#f9fafb;}
-    .sectionhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;}
-    .sectionhead a{font-size:0.95rem;color:#111827;text-decoration:underline;white-space:nowrap;}
-    .pubs{list-style:none;margin:10px 0 0 0;padding:0;}
-    .pubs li{padding:10px 0;border-bottom:1px solid #eef2f7;margin:0;}
-    .pubs li:last-child{border-bottom:none;}
-    .pubtitle{text-decoration:none;color:#111827;font-weight:700;}
-    .pubtitle:hover{text-decoration:underline;}
-    .pubmeta{margin-top:4px;font-size:0.92rem;color:#6b7280;}
-    .small{font-size:0.92rem;color:#6b7280;}
-    .langbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
-    .langbar span{font-size:0.8rem;color:#9ca3af;margin-right:2px;}
-    .langtag{display:inline-block;padding:3px 9px;border-radius:5px;font-size:0.82rem;font-weight:700;
-             text-decoration:none;border:1px solid #d1d5db;color:#374151;background:#fff;letter-spacing:.04em;}
-    .langtag:hover{background:#f3f4f6;border-color:#9ca3af;}
-    .langtag.current{background:#111827;color:#fff;border-color:#111827;cursor:default;}
-    @media(min-width:760px){.container{padding:32px 20px 56px;}h1{font-size:2.1rem;}}</style>
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.6; color:#1f2937; background:#f9fafb; }
+    .container { max-width:900px; margin:0 auto; padding:24px 16px 48px; }
+    .card { border:1px solid #e5e7eb; border-radius:12px; padding:20px; margin-bottom:16px; }
+    .card-green  { background:#edf5ed; border-color:#c9e4c9; }
+    .card-red    { background:#f5edee; border-color:#e4c9cc; }
+    .card-yellow { background:#f5f5ed; border-color:#e4e4c9; }
+    .card-blue   { background:#edeef5; border-color:#c9cce4; }
+    h1 { font-size:1.8rem; margin:0 0 8px 0; line-height:1.25; }
+    h2 { font-size:1.1rem; margin:0 0 8px 0; }
+    p { margin:0 0 10px 0; }
+    ul { margin:8px 0 0 20px; padding:0; }
+    li { margin-bottom:6px; }
+    .subtitle { color:#4b5563; margin-bottom:0; }
+    .links { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .linkbtn { display:inline-block; padding:10px 14px; border-radius:8px; text-decoration:none; border:1px solid #d1d5db; color:#111827; background:#fff; font-weight:600; }
+    .linkbtn:hover { border-color:#9ca3af; background:#f9fafb; }
+    .sectionhead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:8px; }
+    .sectionhead a { font-size:0.95rem; color:#111827; text-decoration:underline; white-space:nowrap; }
+    .pubs { list-style:none; margin:10px 0 0 0; padding:0; }
+    .pubs li { padding:10px 0; border-bottom:1px solid #d5d8ea; margin:0; }
+    .pubs li:last-child { border-bottom:none; }
+    .pubtitle { text-decoration:none; color:#111827; font-weight:700; }
+    .pubtitle:hover { text-decoration:underline; }
+    .pubmeta { margin-top:4px; font-size:0.92rem; color:#6b7280; }
+    .small { font-size:0.92rem; color:#6b7280; }
+    .langbar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+    .langbar span { font-size:0.8rem; color:#9ca3af; margin-right:2px; }
+    .langtag { display:inline-block; padding:3px 9px; border-radius:5px; font-size:0.82rem; font-weight:700;
+               text-decoration:none; border:1px solid #d1d5db; color:#374151; background:#fff; letter-spacing:.04em; }
+    .langtag:hover { background:#f3f4f6; border-color:#9ca3af; }
+    .langtag.current { background:#111827; color:#fff; border-color:#111827; cursor:default; }
+    .msgbtn-wrap { display:flex; justify-content:flex-end; margin-bottom:12px; }
+    .msgbtn { padding:9px 20px; background:#1d4ed8; color:#fff; border:none; border-radius:8px; font-size:0.95rem; font-weight:600; cursor:pointer; }
+    .msgbtn:hover { background:#1e40af; }
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1000; align-items:center; justify-content:center; }
+    .modal-overlay.open { display:flex; }
+    .modal-box { background:#fff; border-radius:14px; padding:28px 24px 24px; width:90%; max-width:440px; position:relative; box-shadow:0 8px 32px rgba(0,0,0,.18); }
+    .modal-close { position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#6b7280; cursor:pointer; line-height:1; padding:0; }
+    .modal-close:hover { color:#111; }
+    .modal-box h3 { margin:0 0 18px 0; font-size:1.1rem; }
+    .modal-box label { display:block; font-size:0.92rem; font-weight:600; color:#374151; margin-bottom:3px; }
+    .modal-field { width:100%; box-sizing:border-box; padding:8px 10px; margin-bottom:14px; border:1px solid #d1d5db; border-radius:7px; font-size:0.95rem; font-family:inherit; }
+    .modal-field:focus { outline:none; border-color:#6b7280; }
+    .modal-send { width:100%; padding:10px; background:#111827; color:#fff; border:none; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer; margin-top:2px; }
+    .modal-send:hover { background:#374151; }
+    .modal-send:disabled { background:#9ca3af; cursor:default; }
+    .modal-success { text-align:center; padding:24px 0 8px; color:#166534; font-weight:600; font-size:1rem; }
+    @media (min-width:760px){ .container{ padding:32px 20px 56px; } h1{ font-size:2.1rem; } }
+  </style>
 </head>
 <body>
   <div class="container">
+
     <nav class="langbar" aria-label="Language">
       <span>Language:</span>
       <a class="langtag" href="/index.html">EN</a>
@@ -44,24 +68,39 @@
       <a class="langtag" href="/ru/index.html">RU</a>
       <a class="langtag current" href="/es/index.html">ES</a>
     </nav>
-    <section class="card">
+
+    <div class="msgbtn-wrap">
+      <button class="msgbtn" onclick="openMsgModal()">Dejarme un mensaje</button>
+    </div>
+
+    <section class="card card-green">
       <h1>Base de conocimientos jurídicos sobre China</h1>
-      <p class="subtitle">Guía práctica para empresas y particulares extranjeros sobre resolución de disputas en China, consultoría de inversiones y práctica de representación.</p>
+      <p class="subtitle">Guía práctica para empresas y particulares extranjeros sobre resolución de disputas en China, consultoría jurídica, consultoría de inversiones y práctica de representación.</p>
       <div class="links">
         <a class="linkbtn" href="/dispute-resolution.html">Resolución de disputas</a>
+        <a class="linkbtn" href="/legal-consulting.html">Consultoría jurídica</a>
         <a class="linkbtn" href="/investment-consulting.html">Consultoría de inversiones</a>
         <a class="linkbtn" href="/representation-practice.html">Práctica de representación</a>
       </div>
     </section>
-    <section class="card">
+
+    <section class="card card-red">
       <h2>A quién va dirigido este sitio</h2>
       <p>Este sitio está diseñado para empresas extranjeras, inversores, particulares, equipos jurídicos internos y abogados en el extranjero que se ocupan de asuntos legales y comerciales relacionados con China.</p>
     </section>
-    <section class="card">
+
+    <section class="card card-yellow">
       <h2>Qué encontrará aquí</h2>
-      <ul><li>Guías prácticas sobre arbitraje y litigios en China</li><li>Listas de verificación para la redacción de cláusulas contractuales y de resolución de disputas</li><li>Listas de verificación de riesgos de inversión y transacción</li><li>Notas de preparación procesal para partes extranjeras</li><li>Actualizaciones de práctica relevantes para partes extranjeras</li></ul>
+      <ul>
+        <li>Guías prácticas sobre arbitraje y litigios en China</li>
+        <li>Listas de verificación para la redacción de cláusulas contractuales y de resolución de disputas</li>
+        <li>Listas de verificación de riesgos de inversión y transacción</li>
+        <li>Notas de preparación procesal para partes extranjeras</li>
+        <li>Actualizaciones de práctica relevantes para partes extranjeras</li>
+      </ul>
     </section>
-    <section class="card">
+
+    <section class="card card-blue">
       <div class="sectionhead">
         <h2>Publicaciones recientes</h2>
         <a href="/es/publications.html">Ver todas las publicaciones</a>
@@ -69,23 +108,87 @@
       <ul class="pubs" id="recent-publications"><!-- filled by JS --></ul>
       <p class="small" style="margin-top:10px;">Versiones multilingües: se actualizan automáticamente con cada nuevo artículo.</p>
     </section>
+
     <p class="small">Esta página ha sido traducida automáticamente y revisada por un profesional.</p>
-    <section class="small">Aviso legal: Los materiales de este sitio se proporcionan únicamente con fines informativos generales y no constituyen asesoramiento jurídico.</section>
+    <section class="small">Aviso legal: Los materiales de este sitio se proporcionan únicamente con fines informativos generales y no constituyen asesoramiento jurídico. La consulta de este sitio o el hecho de ponerse en contacto con nosotros no crea, por sí solo, una relación abogado-cliente.</section>
+
   </div>
+
+  <div class="modal-overlay" id="msgModal" onclick="handleOverlayClick(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeMsgModal()" aria-label="Cerrar">&#215;</button>
+      <h3>Dejar un mensaje</h3>
+      <div id="msgFormWrap">
+        <form id="msgForm" action="https://formspree.io/f/mojyegeq" method="POST">
+          <label for="msgTitle">Asunto</label>
+          <input class="modal-field" id="msgTitle" type="text" name="title" placeholder="Asunto o título breve" required />
+          <label for="msgEmail">Correo electrónico</label>
+          <input class="modal-field" id="msgEmail" type="email" name="email" placeholder="Su dirección de correo" required />
+          <label for="msgBody">Preguntas / Comentarios</label>
+          <textarea class="modal-field" id="msgBody" name="message" rows="5" placeholder="Su mensaje..." required></textarea>
+          <button class="modal-send" type="submit">Enviar</button>
+        </form>
+      </div>
+      <div class="modal-success" id="msgSuccess" style="display:none;">
+        Su mensaje ha sido enviado. ¡Gracias!
+      </div>
+    </div>
+  </div>
+
   <script src="../articles-data.js"></script>
   <script>
     (function(){
-      var LANG="es";
-      var list=document.getElementById("recent-publications");
-      if(!list)return;
-      var sorted=ARTICLES_DATA.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
-      var recent=sorted.slice(0,10);
-      list.innerHTML=recent.map(function(a){
-        var title=(a[LANG]&&a[LANG].title)?a[LANG].title:a.en.title;
-        var url=(a[LANG]&&a[LANG].title)?("articles/"+a.slug+".html"):("/articles/"+a.slug+".html");
-        return "<li><a class=\"pubtitle\" href=\""+url+"\">"+title+"</a><div class=\"pubmeta\">"+a.date+"</div></li>";
+      var LANG = "es";
+      var list = document.getElementById("recent-publications");
+      if (!list) return;
+      var sorted = ARTICLES_DATA.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+      var recent = sorted.slice(0, 10);
+      list.innerHTML = recent.map(function(a){
+        var title = (a[LANG] && a[LANG].title) ? a[LANG].title : a.en.title;
+        var url   = (a[LANG] && a[LANG].title) ? ("articles/" + a.slug + ".html") : ("/articles/" + a.slug + ".html");
+        return "<li><a class=\"pubtitle\" href=\"" + url + "\">" + title + "</a><div class=\"pubmeta\">" + a.date + "</div></li>";
       }).join("");
     })();
+
+    function openMsgModal() {
+      document.getElementById("msgModal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeMsgModal() {
+      document.getElementById("msgModal").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById("msgModal")) closeMsgModal();
+    }
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") closeMsgModal();
+    });
+
+    document.getElementById("msgForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      var btn = this.querySelector("button[type=submit]");
+      btn.disabled = true;
+      btn.textContent = "Enviando\u2026";
+      fetch(this.action, {
+        method: "POST",
+        body: new FormData(this),
+        headers: { "Accept": "application/json" }
+      }).then(function(r) {
+        if (r.ok) {
+          document.getElementById("msgFormWrap").style.display = "none";
+          document.getElementById("msgSuccess").style.display = "block";
+        } else {
+          btn.disabled = false;
+          btn.textContent = "Enviar";
+          alert("Se produjo un error al enviar su mensaje. Por favor, inténtelo de nuevo.");
+        }
+      }).catch(function() {
+        btn.disabled = false;
+        btn.textContent = "Enviar";
+        alert("No se pudo enviar su mensaje. Compruebe su conexión.");
+      });
+    });
   </script>
 </body>
 </html>
