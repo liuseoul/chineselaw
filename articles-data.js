@@ -15,6 +15,28 @@
 
 var ARTICLES_DATA = [
   {
+    "date": "2026-04-17",
+    "slug": "division-of-property-in-china-after-a-court-divorce-obtained-by-a-foreign-couple",
+    "en": {
+      "title": "Division of Property in China After a Court Divorce Obtained by a Foreign Couple"
+    },
+    "ko": {
+      "title": "외국 국적 부부의 소송 이혼 후 중국 내 재산 분할 처리"
+    },
+    "ja": {
+      "title": "外国籍夫婦が訴訟離婚した後の中国国内財産分割の取り扱い"
+    },
+    "fr": {
+      "title": "Traitement du partage des biens situés en Chine après le divorce judiciaire d'un couple étranger"
+    },
+    "ru": {
+      "title": "Раздел имущества в Китае после расторжения брака иностранными гражданами в судебном порядке"
+    },
+    "es": {
+      "title": "Tratamiento de la división de bienes en China tras el divorcio judicial de un matrimonio extranjero"
+    }
+  },
+  {
     "date": "2026-03-11",
     "slug": "website-test-notice-and-upcoming-content-preview",
     "en": {
