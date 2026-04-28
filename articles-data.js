@@ -15,6 +15,28 @@
 
 var ARTICLES_DATA = [
   {
+    "date": "2026-04-28",
+    "slug": "can-secret-recordings-be-used-as-evidence-in-chinese-litigation",
+    "en": {
+      "title": "Can Secret Recordings Be Used as Evidence in Chinese Litigation?"
+    },
+    "ko": {
+      "title": "중국에서 몰래 한 녹음·녹화, 소송 증거로 쓸 수 있을까?"
+    },
+    "ja": {
+      "title": "中国における秘密録音・録画は訴訟証拠として認められるか"
+    },
+    "fr": {
+      "title": "Les enregistrements secrets peuvent-ils être utilisés comme preuves devant les tribunaux en Chine ?"
+    },
+    "ru": {
+      "title": "Могут ли тайные аудио- и видеозаписи служить доказательством в суде в Китае?"
+    },
+    "es": {
+      "title": "¿Pueden utilizarse como prueba judicial en China las grabaciones secretas?"
+    }
+  },
+  {
     "date": "2026-04-17",
     "slug": "division-of-property-in-china-after-a-court-divorce-obtained-by-a-foreign-couple",
     "en": {

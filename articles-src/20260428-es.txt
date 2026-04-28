@@ -1,0 +1,46 @@
+¿Pueden utilizarse como prueba judicial en China las grabaciones secretas?
+
+Pasaste horas negociando con la otra parte, llegaron a un acuerdo verbal... y luego esa persona lo negó todo. Si en ese momento habías activado discretamente la grabadora, ¿tendría valor ese audio ante un tribunal?
+
+Esta es una pregunta de alta utilidad práctica en el ámbito del litigio civil chino. La respuesta: depende del contexto — aunque en la mayoría de los casos, sí.
+
+
+LA REGLA FUNDAMENTAL: MÉTODO LÍCITO, PRUEBA VÁLIDA
+
+El artículo 106 de la Interpretación del Tribunal Supremo Popular sobre la aplicación del Código de Procedimiento Civil de la República Popular China establece con claridad que no podrá utilizarse como fundamento para determinar los hechos del caso la prueba obtenida mediante métodos que infrinjan gravemente los derechos e intereses legítimos de terceros, vulneren prohibiciones legales o atenten seriamente contra el orden público y las buenas costumbres.
+
+Dicho de otro modo: lo que importa no es si grabaste en secreto, sino cómo lo hiciste.
+
+Una grabación de audio o vídeo realizada de forma privada suele ser admisible como prueba si se cumplen tres requisitos:
+
+Primero, el método de obtención debe ser lícito. No habrás entrado ilegalmente en el domicilio ajeno, instalado dispositivos de escucha ni obtenido la grabación mediante métodos que vulneren gravemente el derecho a la intimidad. Grabar en un espacio público o en un lugar compartido por ambas partes generalmente no se considera ilegal.
+
+Segundo, el contenido debe ser claro, íntegro y auténtico. La grabación debe permitir identificar con nitidez voces e imágenes, y no haber sido editada, recortada ni manipulada de ninguna forma. Los tribunales muestran un alto grado de escepticismo ante grabaciones que parecen haber sido retocadas.
+
+Tercero, el contenido debe guardar relación con los hechos que se pretende probar. La grabación debe estar directamente relacionada con lo que se quiere demostrar, no ser un simple fragmento de conversación cotidiana sin relevancia para el caso.
+
+
+EL ESCENARIO MÁS HABITUAL: CONVERSACIONES PRESENCIALES O TELEFÓNICAS
+
+En China, la grabación unilateral de una conversación cara a cara o por teléfono — incluso sin conocimiento de la otra parte — se considera generalmente lícita. Esto difiere de jurisdicciones donde se exige el consentimiento de todas las partes.
+
+Por ejemplo, si tienes un conflicto con tu arrendador por la devolución de la fianza y grabas la llamada de negociación en la que el arrendador hace determinadas promesas, esa grabación puede presentarse perfectamente como prueba en un procedimiento civil.
+
+
+¿QUÉ GRABACIONES NO SON ADMITIDAS?
+
+No todas las grabaciones clandestinas están amparadas por la ley. Es probable que sean excluidas como prueba las obtenidas en las siguientes circunstancias:
+
+- Instalación subrepticia de dispositivos de grabación en el domicilio de otra persona, constituyendo una grave invasión de la privacidad domiciliaria
+- Obtención de registros de llamadas mediante hackeo o software ilegal
+- Utilización de amenazas, engaños u otros medios ilícitos para inducir a la otra parte a realizar determinadas declaraciones
+- Grabaciones cuyo contenido atente manifiestamente contra el orden público y las buenas costumbres, o que en sí mismas sean de naturaleza ilícita
+
+
+LO QUE ESTO SIGNIFICA PARA EL CIUDADANO DE A PIE
+
+El significado práctico de esta norma es claro: en China, la conciencia probatoria es fundamental. Innumerables casos — disputas contractuales, conflictos laborales, préstamos impagados — se pierden por falta de pruebas. Una grabación obtenida lícitamente y debidamente conservada puede ser el elemento determinante que cambie el signo de un pleito.
+
+Si presientes que una conversación podría dar lugar a controversias en el futuro, activar la grabación con anticipación y preservar la integridad y autenticidad de su contenido es una medida completamente legal y pragmática para protegerte.
+
+No obstante, si la situación es compleja — cuando entran en juego secretos empresariales, procedimientos penales o litigios transfronterizos — es aconsejable consultar a un abogado especializado antes de actuar, para asegurarte de que el propio acto de grabar no te genere responsabilidad legal adicional.

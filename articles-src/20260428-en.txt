@@ -1,0 +1,46 @@
+Can Secret Recordings Be Used as Evidence in Chinese Litigation?
+
+You spent hours negotiating with the other party, reached a verbal agreement — and then they flatly denied it ever happened. If you quietly hit record during that conversation, would the audio hold up in court?
+
+This is an eminently practical question in Chinese civil litigation. The answer: it depends — but in most cases, yes.
+
+
+THE CORE RULE: LEGAL METHODS, VALID EVIDENCE
+
+Under Article 106 of the Interpretation of the Supreme People's Court on the Application of the Civil Procedure Law of the People's Republic of China, courts have established a clear standard: evidence obtained by seriously infringing upon the lawful rights of others, violating statutory prohibitions, or severely contravening public order and morality shall not be used as a basis for establishing facts in a case.
+
+In other words, the question isn't whether you recorded secretly — it's how you did it.
+
+A privately made audio or video recording is generally admissible as evidence provided three conditions are met:
+
+First, the method of acquisition must be lawful. You did not unlawfully enter another person's premises, install wiretapping devices, or obtain the recording through any other means that seriously violates privacy rights. Recording in a public place or a shared space is generally not considered unlawful.
+
+Second, the content must be clear, complete, and unaltered. The recording must allow voices or images to be clearly identified and must not have been edited, spliced, or otherwise manipulated. Courts are highly skeptical of recordings that appear to have been post-processed.
+
+Third, the content must be relevant to the facts in dispute. The recording must bear a direct connection to what you are trying to prove — not merely snippets of unrelated everyday conversation.
+
+
+THE MOST COMMON SCENARIO: IN-PERSON AND PHONE CONVERSATIONS
+
+In China, a party who records a face-to-face conversation or telephone call — even without the other party's knowledge — is generally considered to be acting lawfully. This differs from jurisdictions that require "all-party consent."
+
+For example, if you have a dispute with your landlord over the return of a security deposit and you record a negotiation call in which the landlord makes certain commitments, that recording can absolutely be submitted as evidence in civil proceedings.
+
+
+WHAT RECORDINGS WON'T BE ADMITTED
+
+Not all covert recordings enjoy legal protection. Recordings obtained in the following circumstances are likely to be excluded:
+
+- Secret installation of recording devices inside another person's home, constituting a serious invasion of residential privacy
+- Obtaining call records through hacking or illegal software
+- Using threats, deception, or other unlawful means to induce the other party to make specific statements
+- Recordings whose content is plainly contrary to public order and morality, or that are themselves unlawful in nature
+
+
+WHAT THIS MEANS FOR ORDINARY PEOPLE
+
+The practical significance of this rule is straightforward: in China, awareness of evidence matters enormously. Countless cases — contractual disputes, labor grievances, loan defaults — are lost simply for lack of proof. A lawfully made, well-preserved recording can be the decisive factor that turns a losing case around.
+
+If you sense that a conversation may become contentious down the line, starting a recording in advance and ensuring the integrity and authenticity of that recording is a completely legal and pragmatic way to protect yourself.
+
+That said, if the situation is complex — involving corporate trade secrets, criminal proceedings, or cross-border disputes — it is advisable to consult a qualified attorney before taking any action, to ensure that the act of recording itself does not create additional legal exposure for you.
