@@ -15,6 +15,28 @@
 
 var ARTICLES_DATA = [
   {
+    "date": "2026-05-23",
+    "slug": "chinas-legal-framework-for-exit-restrictions-on-foreign-nationals",
+    "en": {
+      "title": "China's Legal Framework for Exit Restrictions on Foreign Nationals"
+    },
+    "ko": {
+      "title": "중국의 외국인 출국제한 법률제도"
+    },
+    "ja": {
+      "title": "中国における外国人の出国制限法律制度"
+    },
+    "fr": {
+      "title": "Le régime juridique chinois de restriction de sortie du territoire pour les ressortissants étrangers"
+    },
+    "ru": {
+      "title": "Правовой режим ограничения выезда иностранных граждан из Китая"
+    },
+    "es": {
+      "title": "El régimen jurídico chino de restricción de salida del territorio para extranjeros"
+    }
+  },
+  {
     "date": "2026-04-28",
     "slug": "can-secret-recordings-be-used-as-evidence-in-chinese-litigation",
     "en": {
