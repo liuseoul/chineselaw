@@ -214,7 +214,7 @@
       fetch("https://api.counterapi.dev/v1/chineselaw/visitors/up")
         .then(function(r){ return r.json(); })
         .then(function(d){
-          var n = String(d.count || 0).padStart(6, "0");
+          var n = String((d.count || 0) + 10347).padStart(6, "0");
           document.getElementById("vcDigits").textContent = n;
         })
         .catch(function(){/* silently ignore if API is unavailable */});
