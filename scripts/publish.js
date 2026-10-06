@@ -275,9 +275,9 @@ ${jsonLdStr}
         if(l!=="en"&&!(entry[l]&&entry[l].title)) return "";
         var href=l==="en"?"/articles/"+SLUG+".html":"/"+l+"/articles/"+SLUG+".html";
         var cls=l===LANG?" current":"";
-        return "<a class=\"langtag"+cls+"\" href=\""+href+"\">"+TAGS[l]+"</a>";
+        return '<a class="langtag'+cls+'" href="'+href+'">'+TAGS[l]+'</a>';
       }).join("");
-      bar.innerHTML="<span>Language:<\\/span>"+links;
+      bar.innerHTML='<span>Language:</span>'+links;
     })();
   </script>
 </body>

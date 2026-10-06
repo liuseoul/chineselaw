@@ -5,7 +5,11 @@
       "Bash(npm run *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "PowerShell(Copy-Item \"F:\\\\web\\\\chineselaw\\\\articles-src\\\\20260311-kr.txt\" \"F:\\\\web\\\\KRCHINESELAW\\\\articles-src\\\\20260311-kr.txt\" -Force)",
+      "PowerShell(Copy-Item \"F:\\\\web\\\\chineselaw\\\\articles-src\\\\20260417-kr.txt\" \"F:\\\\web\\\\KRCHINESELAW\\\\articles-src\\\\20260417-kr.txt\" -Force)",
+      "PowerShell(Copy-Item \"F:\\\\web\\\\chineselaw\\\\articles-src\\\\20260428-kr.txt\" \"F:\\\\web\\\\KRCHINESELAW\\\\articles-src\\\\20260428-kr.txt\" -Force)",
+      "PowerShell(Copy-Item \"F:\\\\web\\\\chineselaw\\\\articles-src\\\\20260523-kr.txt\" \"F:\\\\web\\\\KRCHINESELAW\\\\articles-src\\\\20260523-kr.txt\" -Force)"
     ]
   }
 }
