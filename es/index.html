@@ -37,22 +37,6 @@
                text-decoration:none; border:1px solid #d1d5db; color:#374151; background:#fff; letter-spacing:.04em; }
     .langtag:hover { background:#f3f4f6; border-color:#9ca3af; }
     .langtag.current { background:#111827; color:#fff; border-color:#111827; cursor:default; }
-    .msgbtn-wrap { display:flex; justify-content:flex-end; margin-bottom:12px; }
-    .msgbtn { padding:9px 20px; background:#1d4ed8; color:#fff; border:none; border-radius:8px; font-size:0.95rem; font-weight:600; cursor:pointer; }
-    .msgbtn:hover { background:#1e40af; }
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1000; align-items:center; justify-content:center; }
-    .modal-overlay.open { display:flex; }
-    .modal-box { background:#fff; border-radius:14px; padding:28px 24px 24px; width:90%; max-width:440px; position:relative; box-shadow:0 8px 32px rgba(0,0,0,.18); }
-    .modal-close { position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#6b7280; cursor:pointer; line-height:1; padding:0; }
-    .modal-close:hover { color:#111; }
-    .modal-box h3 { margin:0 0 18px 0; font-size:1.1rem; }
-    .modal-box label { display:block; font-size:0.92rem; font-weight:600; color:#374151; margin-bottom:3px; }
-    .modal-field { width:100%; box-sizing:border-box; padding:8px 10px; margin-bottom:14px; border:1px solid #d1d5db; border-radius:7px; font-size:0.95rem; font-family:inherit; }
-    .modal-field:focus { outline:none; border-color:#6b7280; }
-    .modal-send { width:100%; padding:10px; background:#111827; color:#fff; border:none; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer; margin-top:2px; }
-    .modal-send:hover { background:#374151; }
-    .modal-send:disabled { background:#9ca3af; cursor:default; }
-    .modal-success { text-align:center; padding:24px 0 8px; color:#166534; font-weight:600; font-size:1rem; }
     @media (min-width:760px){ .container{ padding:32px 20px 56px; } h1{ font-size:2.1rem; } }
   </style>
 </head>
@@ -111,29 +95,12 @@
 
     <p class="small">Esta página ha sido traducida automáticamente y revisada por un profesional.</p>
     <section class="small">Aviso legal: Los materiales de este sitio se proporcionan únicamente con fines informativos generales y no constituyen asesoramiento jurídico. La consulta de este sitio o el hecho de ponerse en contacto con nosotros no crea, por sí solo, una relación abogado-cliente.</section>
+    <section class="small">
+      Para consultas que contengan información confidencial o sensible, le rogamos que dirija su correspondencia directamente a chineselaw[at]protonmail.com
+    </section>
 
   </div>
 
-  <div class="modal-overlay" id="msgModal" onclick="handleOverlayClick(event)">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeMsgModal()" aria-label="Cerrar">&#215;</button>
-      <h3>Dejar un mensaje</h3>
-      <div id="msgFormWrap">
-        <form id="msgForm" action="https://formspree.io/f/mojyegeq" method="POST">
-          <label for="msgTitle">Asunto</label>
-          <input class="modal-field" id="msgTitle" type="text" name="title" placeholder="Asunto o título breve" required />
-          <label for="msgEmail">Correo electrónico</label>
-          <input class="modal-field" id="msgEmail" type="email" name="email" placeholder="Su dirección de correo" required />
-          <label for="msgBody">Preguntas / Comentarios</label>
-          <textarea class="modal-field" id="msgBody" name="message" rows="5" placeholder="Su mensaje..." required></textarea>
-          <button class="modal-send" type="submit">Enviar</button>
-        </form>
-      </div>
-      <div class="modal-success" id="msgSuccess" style="display:none;">
-        Su mensaje ha sido enviado. ¡Gracias!
-      </div>
-    </div>
-  </div>
 
   <script src="../articles-data.js"></script>
   <script>
@@ -150,45 +117,6 @@
       }).join("");
     })();
 
-    function openMsgModal() {
-      document.getElementById("msgModal").classList.add("open");
-      document.body.style.overflow = "hidden";
-    }
-    function closeMsgModal() {
-      document.getElementById("msgModal").classList.remove("open");
-      document.body.style.overflow = "";
-    }
-    function handleOverlayClick(e) {
-      if (e.target === document.getElementById("msgModal")) closeMsgModal();
-    }
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") closeMsgModal();
-    });
-
-    document.getElementById("msgForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      var btn = this.querySelector("button[type=submit]");
-      btn.disabled = true;
-      btn.textContent = "Enviando\u2026";
-      fetch(this.action, {
-        method: "POST",
-        body: new FormData(this),
-        headers: { "Accept": "application/json" }
-      }).then(function(r) {
-        if (r.ok) {
-          document.getElementById("msgFormWrap").style.display = "none";
-          document.getElementById("msgSuccess").style.display = "block";
-        } else {
-          btn.disabled = false;
-          btn.textContent = "Enviar";
-          alert("Se produjo un error al enviar su mensaje. Por favor, inténtelo de nuevo.");
-        }
-      }).catch(function() {
-        btn.disabled = false;
-        btn.textContent = "Enviar";
-        alert("No se pudo enviar su mensaje. Compruebe su conexión.");
-      });
-    });
   </script>
 </body>
 </html>

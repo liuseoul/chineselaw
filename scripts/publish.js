@@ -69,6 +69,14 @@ const DISCLAIMER = {
   ru: "Отказ от ответственности: Материалы на этом сайте предоставляются исключительно в информационных целях и не являются юридической консультацией.",
   es: "Aviso legal: Los materiales de este sitio se proporcionan únicamente con fines informativos generales y no constituyen asesoramiento jurídico.",
 };
+const CONTACT_NOTICE = {
+  en: "For inquiries containing confidential or sensitive information, please direct your correspondence to chineselaw[at]protonmail.com",
+  ko: "개인 정보 또는 기밀 정보가 포함된 문의는 chineselaw[at]protonmail.com으로 직접 이메일을 보내 주시기 바랍니다.",
+  ja: "個人情報または機密情報を含むお問い合わせは、chineselaw[at]protonmail.com まで直接メールにてご連絡ください。",
+  fr: "Pour toute demande contenant des informations confidentielles ou sensibles, veuillez adresser votre correspondance directement à chineselaw[at]protonmail.com",
+  ru: "По вопросам, содержащим конфиденциальную или чувствительную информацию, просим направлять корреспонденцию непосредственно на адрес chineselaw[at]protonmail.com",
+  es: "Para consultas que contengan información confidencial o sensible, le rogamos que dirija su correspondencia directamente a chineselaw[at]protonmail.com",
+};
 const SITE_TITLE = {
   en: "China Legal Practice Knowledge Base",
   ko: "중국 법률 실무 지식 베이스",
@@ -261,6 +269,7 @@ ${jsonLdStr}
       </div>
     </article>
     <p class="small">${DISCLAIMER[lang]}</p>
+    <p class="small">${CONTACT_NOTICE[lang]}</p>
   </div>
   <script src="${dataPath}"></script>
   <script>

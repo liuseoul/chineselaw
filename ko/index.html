@@ -37,22 +37,6 @@
                text-decoration:none; border:1px solid #d1d5db; color:#374151; background:#fff; letter-spacing:.04em; }
     .langtag:hover { background:#f3f4f6; border-color:#9ca3af; }
     .langtag.current { background:#111827; color:#fff; border-color:#111827; cursor:default; }
-    .msgbtn-wrap { display:flex; justify-content:flex-end; margin-bottom:12px; }
-    .msgbtn { padding:9px 20px; background:#1d4ed8; color:#fff; border:none; border-radius:8px; font-size:0.95rem; font-weight:600; cursor:pointer; }
-    .msgbtn:hover { background:#1e40af; }
-    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1000; align-items:center; justify-content:center; }
-    .modal-overlay.open { display:flex; }
-    .modal-box { background:#fff; border-radius:14px; padding:28px 24px 24px; width:90%; max-width:440px; position:relative; box-shadow:0 8px 32px rgba(0,0,0,.18); }
-    .modal-close { position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#6b7280; cursor:pointer; line-height:1; padding:0; }
-    .modal-close:hover { color:#111; }
-    .modal-box h3 { margin:0 0 18px 0; font-size:1.1rem; }
-    .modal-box label { display:block; font-size:0.92rem; font-weight:600; color:#374151; margin-bottom:3px; }
-    .modal-field { width:100%; box-sizing:border-box; padding:8px 10px; margin-bottom:14px; border:1px solid #d1d5db; border-radius:7px; font-size:0.95rem; font-family:inherit; }
-    .modal-field:focus { outline:none; border-color:#6b7280; }
-    .modal-send { width:100%; padding:10px; background:#111827; color:#fff; border:none; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer; margin-top:2px; }
-    .modal-send:hover { background:#374151; }
-    .modal-send:disabled { background:#9ca3af; cursor:default; }
-    .modal-success { text-align:center; padding:24px 0 8px; color:#166534; font-weight:600; font-size:1rem; }
     @media (min-width:760px){ .container{ padding:32px 20px 56px; } h1{ font-size:2.1rem; } }
   </style>
 </head>
@@ -69,9 +53,6 @@
       <a class="langtag" href="/es/index.html">ES</a>
     </nav>
 
-    <div class="msgbtn-wrap">
-      <button class="msgbtn" onclick="openMsgModal()">메시지 남기기</button>
-    </div>
 
     <section class="card card-green">
       <h1>중국 법률 실무 지식 베이스</h1>
@@ -111,29 +92,12 @@
 
     <p class="small">이 페이지는 기계 번역과 전문 편집을 거쳐 작성되었습니다.</p>
     <section class="small">면책 고지: 이 웹사이트의 자료는 일반 정보 제공 목적으로만 제공되며 법률 자문을 구성하지 않습니다. 이 웹사이트를 열람하거나 연락하는 행위만으로 변호사-의뢰인 관계가 형성되지 않습니다.</section>
+    <section class="small">
+      개인 정보 또는 기밀 정보가 포함된 문의는 chineselaw[at]protonmail.com으로 직접 이메일을 보내 주시기 바랍니다.
+    </section>
 
   </div>
 
-  <div class="modal-overlay" id="msgModal" onclick="handleOverlayClick(event)">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeMsgModal()" aria-label="닫기">&#215;</button>
-      <h3>메시지 남기기</h3>
-      <div id="msgFormWrap">
-        <form id="msgForm" action="https://formspree.io/f/mojyegeq" method="POST">
-          <label for="msgTitle">제목</label>
-          <input class="modal-field" id="msgTitle" type="text" name="title" placeholder="제목을 입력하세요" required />
-          <label for="msgEmail">이메일</label>
-          <input class="modal-field" id="msgEmail" type="email" name="email" placeholder="이메일 주소" required />
-          <label for="msgBody">질문 / 의견</label>
-          <textarea class="modal-field" id="msgBody" name="message" rows="5" placeholder="메시지를 입력하세요..." required></textarea>
-          <button class="modal-send" type="submit">보내기</button>
-        </form>
-      </div>
-      <div class="modal-success" id="msgSuccess" style="display:none;">
-        메시지가 전송되었습니다. 감사합니다!
-      </div>
-    </div>
-  </div>
 
   <script src="../articles-data.js"></script>
   <script>
@@ -150,45 +114,6 @@
       }).join("");
     })();
 
-    function openMsgModal() {
-      document.getElementById("msgModal").classList.add("open");
-      document.body.style.overflow = "hidden";
-    }
-    function closeMsgModal() {
-      document.getElementById("msgModal").classList.remove("open");
-      document.body.style.overflow = "";
-    }
-    function handleOverlayClick(e) {
-      if (e.target === document.getElementById("msgModal")) closeMsgModal();
-    }
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") closeMsgModal();
-    });
-
-    document.getElementById("msgForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      var btn = this.querySelector("button[type=submit]");
-      btn.disabled = true;
-      btn.textContent = "전송 중\u2026";
-      fetch(this.action, {
-        method: "POST",
-        body: new FormData(this),
-        headers: { "Accept": "application/json" }
-      }).then(function(r) {
-        if (r.ok) {
-          document.getElementById("msgFormWrap").style.display = "none";
-          document.getElementById("msgSuccess").style.display = "block";
-        } else {
-          btn.disabled = false;
-          btn.textContent = "보내기";
-          alert("메시지 전송 중 오류가 발생했습니다. 다시 시도해 주세요.");
-        }
-      }).catch(function() {
-        btn.disabled = false;
-        btn.textContent = "보내기";
-        alert("메시지를 전송할 수 없습니다. 연결 상태를 확인해 주세요.");
-      });
-    });
   </script>
 </body>
 </html>
