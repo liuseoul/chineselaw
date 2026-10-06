@@ -34,6 +34,11 @@
  *        git commit -m "Publish article YYYYMMDD"
  *        git push
  *      Cloudflare Pages auto-deploys in ~1 minute.
+ *
+ * ADDING TOPIC TAGS TO AN ARTICLE:
+ *   In articles-data.js, add a "tags" array to the article entry, e.g.:
+ *     "tags": ["China law", "exit restrictions", "foreign nationals"]
+ *   These appear as JSON-LD keywords for search engines and AI crawlers.
  */
 
 "use strict";
@@ -44,6 +49,7 @@ const vm   = require("vm");
 const ROOT      = path.join(__dirname, "..");
 const SRC_DIR   = path.join(ROOT, "articles-src");
 const DATA_FILE = path.join(ROOT, "articles-data.js");
+const SITE_URL  = "https://chinese.law";
 
 // File suffix (user-facing) → internal language code used in dirs + data
 const FILE_LANG = { en:"en", kr:"ko", jp:"ja", fr:"fr", ru:"ru", es:"es" };
@@ -51,6 +57,9 @@ const FILE_LANG = { en:"en", kr:"ko", jp:"ja", fr:"fr", ru:"ru", es:"es" };
 const LANG_TAGS = { en:"EN", ko:"KR", ja:"JP", fr:"FR", ru:"RU", es:"ES" };
 const HOME_LABEL = {
   en:"Home", ko:"홈", ja:"ホーム", fr:"Accueil", ru:"Главная", es:"Inicio",
+};
+const OG_LOCALE = {
+  en:"en_US", ko:"ko_KR", ja:"ja_JP", fr:"fr_FR", ru:"ru_RU", es:"es_ES",
 };
 const DISCLAIMER = {
   en: "Disclaimer: The materials on this website are provided for general informational purposes only and do not constitute legal advice. Viewing this website or contacting us does not create a lawyer-client relationship.",
@@ -71,6 +80,18 @@ const SITE_TITLE = {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+function escapeAttr(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function escapeJson(str) {
+  return String(str).replace(/</g, "\\u003c").replace(/>/g, "\\u003e");
+}
+
 function slugify(text) {
   return text
     .toLowerCase()
@@ -86,19 +107,21 @@ function isoDate(yyyymmdd) {
   return `${yyyymmdd.slice(0,4)}-${yyyymmdd.slice(4,6)}-${yyyymmdd.slice(6,8)}`;
 }
 
-/** Parse a text file → { title, bodyHtml } */
+/** Parse a text file → { title, bodyHtml, description } */
 function parseTxt(filePath) {
   const raw = fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n");
   const lines = raw.split("\n");
   const title = lines[0].replace(/^#+\s*/, "").trim();
   const body  = lines.slice(1).join("\n").trim();
-  const bodyHtml = body
+  const paragraphs = body
     .split(/\n{2,}/)
     .map(p => p.replace(/\n/g, " ").trim())
-    .filter(Boolean)
-    .map(p => `<p>${p}</p>`)
-    .join("\n    ");
-  return { title, bodyHtml };
+    .filter(Boolean);
+  const bodyHtml = paragraphs.map(p => `<p>${p}</p>`).join("\n    ");
+  // First paragraph as meta description, capped at 155 chars
+  let description = paragraphs[0] || title;
+  if (description.length > 155) description = description.slice(0, 152) + "...";
+  return { title, bodyHtml, description };
 }
 
 /** Load ARTICLES_DATA from articles-data.js (handles unquoted JS keys) */
@@ -128,19 +151,82 @@ function saveArticlesData(articles) {
  * so adding a new language later automatically updates all switchers without
  * regenerating old HTML files.
  *
- * lang:     internal code  ("en", "ko", "ja", "fr", "ru", "es")
- * dataPath: relative path from this HTML file to articles-data.js
+ * lang:        internal code  ("en", "ko", "ja", "fr", "ru", "es")
+ * dataPath:    relative path from this HTML file to articles-data.js
+ * description: first-paragraph excerpt for meta/og tags
+ * entry:       full article entry (for hreflang + tags)
  */
-function makeArticleHtml(lang, slug, title, bodyHtml, date, dataPath) {
-  const isEn    = lang === "en";
-  const homeHref = isEn ? "/index.html" : `/${lang}/index.html`;
+function makeArticleHtml(lang, slug, title, bodyHtml, date, dataPath, description, entry) {
+  const isEn      = lang === "en";
+  const homeHref  = isEn ? "/index.html" : `/${lang}/index.html`;
+  const canonical = isEn
+    ? `${SITE_URL}/articles/${slug}.html`
+    : `${SITE_URL}/${lang}/articles/${slug}.html`;
+
+  // hreflang alternate links for every published language version
+  const hrefLangLines = ["en","ko","ja","fr","ru","es"]
+    .filter(l => l === "en" || (entry[l] && entry[l].title))
+    .map(l => {
+      const href = l === "en"
+        ? `${SITE_URL}/articles/${slug}.html`
+        : `${SITE_URL}/${l}/articles/${slug}.html`;
+      return `  <link rel="alternate" hreflang="${l}" href="${href}" />`;
+    });
+  hrefLangLines.push(
+    `  <link rel="alternate" hreflang="x-default" href="${SITE_URL}/articles/${slug}.html" />`
+  );
+
+  // JSON-LD structured data (schema.org Article)
+  const jsonLdObj = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "datePublished": date,
+    "dateModified": date,
+    "inLanguage": lang,
+    "url": canonical,
+    "author": {
+      "@type": "Organization",
+      "name": SITE_TITLE.en,
+      "url": SITE_URL
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": SITE_TITLE.en,
+      "url": SITE_URL
+    },
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": SITE_TITLE.en,
+      "url": SITE_URL
+    }
+  };
+  if (entry.tags && entry.tags.length) {
+    jsonLdObj.keywords = entry.tags.join(", ");
+  }
+  // Escape < > inside JSON string to prevent script injection
+  const jsonLdStr = escapeJson(JSON.stringify(jsonLdObj, null, 2));
 
   return `<!doctype html>
-<html lang="${lang === "ko" ? "ko" : lang === "ja" ? "ja" : lang}">
+<html lang="${lang}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title} | ${SITE_TITLE[lang]}</title>
+  <meta name="description" content="${escapeAttr(description)}" />
+  <link rel="canonical" href="${canonical}" />
+${hrefLangLines.join("\n")}
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="${escapeAttr(title)}" />
+  <meta property="og:description" content="${escapeAttr(description)}" />
+  <meta property="og:url" content="${canonical}" />
+  <meta property="og:site_name" content="${escapeAttr(SITE_TITLE.en)}" />
+  <meta property="og:locale" content="${OG_LOCALE[lang] || "en_US"}" />
+  <meta property="article:published_time" content="${date}" />
+  <script type="application/ld+json">
+${jsonLdStr}
+  </script>
   <style>
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.7;color:#1f2937;background:#f9fafb;}
     .container{max-width:860px;margin:0 auto;padding:24px 16px 56px;}
@@ -196,6 +282,36 @@ function makeArticleHtml(lang, slug, title, bodyHtml, date, dataPath) {
   </script>
 </body>
 </html>`;
+}
+
+/** Write sitemap.xml from the current articles list */
+function generateSitemap(articles) {
+  const langs = ["en","ko","ja","fr","ru","es"];
+  const urls = [];
+
+  // Home pages
+  urls.push(`  <url>\n    <loc>${SITE_URL}/</loc>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>`);
+  for (const l of langs.filter(l => l !== "en")) {
+    urls.push(`  <url>\n    <loc>${SITE_URL}/${l}/</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+  }
+
+  // Article pages
+  for (const article of articles) {
+    urls.push(`  <url>\n    <loc>${SITE_URL}/articles/${article.slug}.html</loc>\n    <lastmod>${article.date}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+    for (const l of langs.filter(l => l !== "en")) {
+      if (article[l] && article[l].title) {
+        urls.push(`  <url>\n    <loc>${SITE_URL}/${l}/articles/${article.slug}.html</loc>\n    <lastmod>${article.date}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
+      }
+    }
+  }
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join("\n")}
+</urlset>
+`;
+  fs.writeFileSync(path.join(ROOT, "sitemap.xml"), sitemap, "utf8");
+  console.log("  ✓ sitemap.xml updated");
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -259,25 +375,31 @@ function main() {
 
     const slug = entry.slug;
 
-    // ── Step 4: For each supplied language file, generate HTML ─────────
+    // ── Pass 1: Parse all language files, update entry titles ──────────
+    const parsed = {};
     for (const [fileLang, filePath] of Object.entries(files)) {
-      const lang = FILE_LANG[fileLang];           // e.g. "kr" → "ko"
-      const { title, bodyHtml } = parseTxt(filePath);
-
-      // Update the data entry
+      const lang = FILE_LANG[fileLang];
+      const { title, bodyHtml, description } = parseTxt(filePath);
       entry[lang] = { title };
+      parsed[lang] = { bodyHtml, description };
+    }
 
-      // Paths
-      const isEnglish = lang === "en";
-      const articleDir  = isEnglish
+    // ── Pass 2: Generate HTML for all languages (entry now fully populated)
+    for (const [fileLang] of Object.entries(files)) {
+      const lang = FILE_LANG[fileLang];
+      const { bodyHtml, description } = parsed[lang];
+      const { title } = entry[lang];
+
+      const isEnglish  = lang === "en";
+      const articleDir = isEnglish
         ? path.join(ROOT, "articles")
         : path.join(ROOT, lang, "articles");
-      const dataPath    = isEnglish ? "../articles-data.js" : "../../articles-data.js";
+      const dataPath   = isEnglish ? "../articles-data.js" : "../../articles-data.js";
 
       fs.mkdirSync(articleDir, { recursive: true });
       fs.writeFileSync(
         path.join(articleDir, `${slug}.html`),
-        makeArticleHtml(lang, slug, title, bodyHtml, date, dataPath),
+        makeArticleHtml(lang, slug, title, bodyHtml, date, dataPath, description, entry),
         "utf8"
       );
       const display = isEnglish ? `articles/${slug}.html` : `${lang}/articles/${slug}.html`;
@@ -293,18 +415,20 @@ function main() {
     anyChanges = true;
   }
 
-  // ── Step 5: Save and report ───────────────────────────────────────────
+  // ── Step 5: Save data file, regenerate sitemap ────────────────────────
   if (anyChanges) {
     saveArticlesData(articles);
     console.log("\n  ✓ articles-data.js updated");
-    console.log("\n✅  Done! Next steps:");
-    console.log("      git add .");
-    console.log('      git commit -m "Publish article"');
-    console.log("      git push");
-    console.log("      (Cloudflare Pages auto-deploys in ~1 minute)");
-  } else {
-    console.log("\nNothing changed.");
   }
+
+  // Always regenerate sitemap so it reflects current articles-data.js
+  generateSitemap(articles);
+
+  console.log("\n✅  Done! Next steps:");
+  console.log("      git add .");
+  console.log('      git commit -m "Publish article"');
+  console.log("      git push");
+  console.log("      (Cloudflare Pages auto-deploys in ~1 minute)");
 }
 
 main();

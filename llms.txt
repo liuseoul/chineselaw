@@ -1,0 +1,28 @@
+# China Legal Practice Knowledge Base
+
+> Practical guidance for foreign companies and individuals on China dispute resolution, legal consulting, investment consulting, and representation practice.
+
+## About
+
+This site publishes plain-language articles on Chinese law as it applies to foreign nationals and companies operating in or dealing with China. Topics include civil litigation and arbitration procedures, evidence law, exit restrictions on foreign nationals, foreign investment, and family law matters with a cross-border element.
+
+All articles are available in six languages: English, Korean (한국어), Japanese (日本語), French (Français), Russian (Русский), and Spanish (Español).
+
+## Articles
+
+- [China's Legal Framework for Exit Restrictions on Foreign Nationals](https://chinese.law/articles/chinas-legal-framework-for-exit-restrictions-on-foreign-nationals.html) — 2026-05-23
+  A systematic analysis of Chinese laws that permit restricting the departure of foreign nationals, covering civil enforcement, supervisory investigations, criminal procedure, and practical risk assessment for foreign business personnel.
+
+- [Can Secret Recordings Be Used as Evidence in Chinese Litigation?](https://chinese.law/articles/can-secret-recordings-be-used-as-evidence-in-chinese-litigation.html) — 2026-04-28
+  An analysis of when covert audio and video recordings are admissible as evidence under Chinese civil procedure law, including the legality conditions and evidentiary weight.
+
+- [Division of Property in China After a Court Divorce Obtained by a Foreign Couple](https://chinese.law/articles/division-of-property-in-china-after-a-court-divorce-obtained-by-a-foreign-couple.html) — 2026-04-17
+  How Chinese courts handle the division of assets located in China following a divorce between foreign nationals, including choice-of-law rules and enforcement considerations.
+
+## Contact
+
+Use the contact form on the homepage at https://chinese.law/ to send a message to the site author.
+
+## Disclaimer
+
+The materials on this website are provided for general informational purposes only and do not constitute legal advice.

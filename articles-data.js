@@ -17,6 +17,15 @@ var ARTICLES_DATA = [
   {
     "date": "2026-05-23",
     "slug": "chinas-legal-framework-for-exit-restrictions-on-foreign-nationals",
+    "tags": [
+      "China law",
+      "exit restrictions",
+      "foreign nationals",
+      "civil enforcement",
+      "criminal procedure",
+      "immigration",
+      "supervisory investigation"
+    ],
     "en": {
       "title": "China's Legal Framework for Exit Restrictions on Foreign Nationals"
     },
@@ -39,6 +48,14 @@ var ARTICLES_DATA = [
   {
     "date": "2026-04-28",
     "slug": "can-secret-recordings-be-used-as-evidence-in-chinese-litigation",
+    "tags": [
+      "China law",
+      "evidence",
+      "litigation",
+      "secret recordings",
+      "civil procedure",
+      "admissibility"
+    ],
     "en": {
       "title": "Can Secret Recordings Be Used as Evidence in Chinese Litigation?"
     },
@@ -61,6 +78,14 @@ var ARTICLES_DATA = [
   {
     "date": "2026-04-17",
     "slug": "division-of-property-in-china-after-a-court-divorce-obtained-by-a-foreign-couple",
+    "tags": [
+      "China law",
+      "divorce",
+      "property division",
+      "foreign nationals",
+      "family law",
+      "cross-border"
+    ],
     "en": {
       "title": "Division of Property in China After a Court Divorce Obtained by a Foreign Couple"
     },
