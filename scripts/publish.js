@@ -251,6 +251,7 @@ ${jsonLdStr}
              text-decoration:none;border:1px solid #d1d5db;color:#374151;background:#fff;letter-spacing:.04em;}
     .langtag:hover{background:#f3f4f6;border-color:#9ca3af;}
     .langtag.current{background:#111827;color:#fff;border-color:#111827;cursor:default;}
+    .contact-notice{font-size:0.88rem;color:#1d4ed8;background:#eff6ff;border-left:3px solid #3b82f6;border-radius:0 6px 6px 0;padding:10px 14px;margin-top:12px;font-weight:500;}
     @media(min-width:760px){.container{padding:32px 24px 64px;}h1{font-size:2rem;}}
   </style>
 </head>
@@ -269,7 +270,7 @@ ${jsonLdStr}
       </div>
     </article>
     <p class="small">${DISCLAIMER[lang]}</p>
-    <p class="small">${CONTACT_NOTICE[lang]}</p>
+    <p class="contact-notice">${CONTACT_NOTICE[lang]}</p>
   </div>
   <script src="${dataPath}"></script>
   <script>
